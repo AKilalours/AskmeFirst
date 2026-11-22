@@ -704,7 +704,7 @@ async def preview(body: PreviewIn):
         return {"markdown": load_demo().get("preview", "# Preview\n\nA preview is not available in demo mode."), "source": "demo"}
     try:
         md, src = await llm_text(PREVIEW_SYSTEM, f"Original request: {body.request}\n{lang_line(body.lang)}\n\nInstructions:\n{body.brief}", 60, 5000)
-        log_run("preview", {"request": body.request, "source": src})
+        log_run("preview", {"request": body.request, "source": src, "markdown": md})
         return {"markdown": md, "source": src}
     except Exception as e:  # noqa: BLE001
         log.error("preview failed: %s", e)
@@ -762,9 +762,11 @@ async def voice_check(body: VoiceIn):
             g = (lambda k: w.get(k)) if isinstance(w, dict) else (lambda k: getattr(w, k, None))
             wins.append({"text": str(g("text") or ""), "label": str(g("label") or ""),
                          "score": g("ai_assistance_score"), "confidence": str(g("confidence") or "")})
-        return {"eligible": True, "words": words, "label": short, "headline": headline,
-                "fraction_human": get("fraction_human"), "fraction_ai": get("fraction_ai"),
-                "fraction_ai_assisted": get("fraction_ai_assisted"), "ai_like": ai_like, "windows": wins}
+        result = {"eligible": True, "words": words, "label": short, "headline": headline,
+                  "fraction_human": get("fraction_human"), "fraction_ai": get("fraction_ai"),
+                  "fraction_ai_assisted": get("fraction_ai_assisted"), "ai_like": ai_like, "windows": wins}
+        log_run("voice", {"out": result})
+        return result
     except Exception as e:  # noqa: BLE001
         log.error("pangram failed: %s", e)
         return {"eligible": False, "words": words, "error": str(e)[:200]}
@@ -822,6 +824,21 @@ def _frontend() -> Optional[Path]:
         if p.exists():
             return p
     return None
+
+
+VENDOR = {"gsap.min.js"}
+
+
+@app.get("/static/{name}")
+async def static_file(name: str):
+    """Local copies of third-party files so the demo works without wifi (only whitelisted names)."""
+    if name not in VENDOR:
+        return JSONResponse({"error": "not found"}, status_code=404)
+    for d in [ROOT.parent / "frontend", ROOT / "frontend"]:
+        f = d / name
+        if f.exists():
+            return FileResponse(f, headers={"Cache-Control": "public, max-age=86400"})
+    return JSONResponse({"error": "not found"}, status_code=404)
 
 
 @app.get("/")

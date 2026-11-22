@@ -1,50 +1,267 @@
 {
-  "persona": "Maria, healthcare consultant",
-  "request": "Make a flyer for my health workshop",
+  "persona": "Recorded live run",
+  "request": "A poster for my bakery's weekend sale",
   "upload_text": "Healthy Hearts Workshop\nCommunity Room, Flatbush Library\nThursdays 6pm\nLearn about blood pressure, nutrition and exercise. All welcome.\nRSVP: 718-555-0142",
   "questions": [
     {
-      "field": "audience",
-      "question": "Who do you most want to walk into this workshop?",
-      "why": "A flyer for retirees reads very differently from one for busy parents.",
-      "suggestions": [
-        "Older adults managing blood pressure",
-        "Busy parents in the neighborhood",
-        "Caregivers of aging relatives"
-      ],
-      "summary": "You want a flyer that brings older neighbors to your heart health workshop."
-    },
-    {
+      "summary": "You want a poster advertising your bakery's weekend sale to attract customers.",
       "field": "key_details",
-      "question": "What do you know from your work that a stranger writing this would miss?",
-      "why": "This is the part only you can add. It keeps the flyer from sounding generic.",
+      "question": "What dates, opening hours and discounts should your bakery's weekend sale poster show?",
+      "why": "Exact dates, times and offers are what customers look for first on a sale poster.",
       "suggestions": [
-        "People feel rushed at doctor visits",
-        "Many are embarrassed to ask basic questions",
-        "Free tea helps people relax and stay"
+        "Saturday and Sunday, 8am to 2pm, 20% off bread",
+        "Sat 12 to Sun 13 July, all cakes half price",
+        "Weekend only, buy two pastries, get one free"
       ]
     },
     {
-      "field": "purpose",
-      "question": "What should someone do after reading the flyer?",
-      "why": "One clear action makes the flyer far more effective.",
+      "summary": "",
+      "field": "format",
+      "question": "Will your weekend sale poster hang in the shop window, be printed, or be shared online?",
+      "why": "The display place sets the right poster size, layout and how much text fits.",
       "suggestions": [
-        "Call to reserve a seat",
-        "Simply show up on Thursday",
-        "Bring a friend or family member"
+        "A4 printed poster for the shop window",
+        "A3 poster for the door plus an Instagram version",
+        "Square social media post only"
       ]
     },
     {
+      "summary": "",
+      "field": "key_details",
+      "question": "What is your bakery's name, plus the address or phone number to print on the poster?",
+      "why": "Customers need a name and a way to find you, so the poster works as an advertisement.",
+      "suggestions": [
+        "Golden Crust Bakery, 12 High Street, 020 7946 0321",
+        "Maple Loaf Bakehouse, phone 07700 900123 only",
+        "Sunrise Bakery, Unit 4 Market Hall, no phone"
+      ]
+    },
+    {
+      "summary": "",
+      "field": "style",
+      "question": "What colours and mood should your Golden Crust Bakery weekend sale poster have for the shop window?",
+      "why": "Colours and mood help the poster catch passers-by's eyes from the street.",
+      "suggestions": [
+        "Warm golden and brown tones, rustic handmade feel",
+        "Bright cheerful yellow and red, bold playful lettering",
+        "Clean white and navy, modern minimal design"
+      ]
+    },
+    {
+      "summary": "",
+      "field": "key_details",
+      "question": "Which bakery images should appear on your Golden Crust weekend sale poster, such as loaves, wheat or pastries?",
+      "why": "Specific bread imagery makes the rustic handmade feel recognisable from the street.",
+      "suggestions": [
+        "Sourdough loaves and baguettes on a wooden board",
+        "Golden wheat ears beside a bread basket",
+        "Croissants and pastries with a hand-drawn border"
+      ]
+    },
+    {
+      "summary": "",
       "field": "avoid",
-      "question": "Is there anything this flyer should never say or show?",
-      "why": "Clear limits keep it respectful and give you something to check it against.",
+      "question": "Is there anything the Golden Crust weekend sale poster must never say or show?",
+      "why": "Knowing what to leave out keeps the poster accurate and stops unwanted claims from creeping in.",
       "suggestions": [
-        "Medical jargon",
-        "Before and after weight photos",
-        "The word free, it sounds cheap"
+        "No gluten-free or vegan claims, please",
+        "Avoid showing other bakeries' brand names",
+        "Nothing about prices in pounds, just percentages"
+      ]
+    },
+    {
+      "summary": "",
+      "field": "key_details",
+      "question": "உங்கள் சுவரொட்டியில் கடையின் பெயர், விற்பனை நேரம் மற்றும் தொடர்பு எண்ணை சேர்க்க விரும்புகிறீர்களா?",
+      "why": "சரியான பெயரும் நேரமும் தொடர்பு எண்ணும் இருந்தால் குடும்பத்தினர் உடனடியாக கடைக்கு வருவார்கள்.",
+      "suggestions": [
+        "கடை பெயர்: ராஜா பேக்கரி, காலை 7 முதல் மாலை 6 வரை",
+        "தொடர்பு எண்: 98XXXXXXXX, கடை முகவரியும் சேர்க்கவும்",
+        "சனி, ஞாயிறு மட்டும், காலை 7 மணி முதல் விற்பனை"
+      ]
+    },
+    {
+      "summary": "",
+      "field": "format",
+      "question": "இந்த சுவரொட்டியின் அளவு மற்றும் வடிவம் எப்படி இருக்க வேண்டும், அச்சிடுவதா அல்லது சமூக ஊடகத்திலா?",
+      "why": "சரியான அளவு மற்றும் வடிவம் தெரிந்தால் கடையின் முன் அல்லது ஆன்லைனில் சரியாகத் தெரியும்.",
+      "suggestions": [
+        "A3 அளவு அச்சு சுவரொட்டி, கடை முன் ஒட்ட",
+        "சமூக ஊடகத்துக்கான சதுர பதிவு படம்",
+        "A4 அளவு அச்சு துண்டறிக்கை மட்டும்"
+      ]
+    },
+    {
+      "summary": "",
+      "field": "key_details",
+      "question": "சுவரொட்டியில் விற்பனை தேதி, நேரம், கடை முகவரி மற்றும் தொடர்பு எண் என்ன?",
+      "why": "சரியான தேதி, நேரம் மற்றும் முகவரி இருந்தால் மக்கள் உடனே கடைக்கு வருவார்கள்.",
+      "suggestions": [
+        "சனி, ஞாயிறு காலை 8 முதல் மாலை 6 வரை",
+        "கடை முகவரியும் 98xxxxxx தொடர்பு எண்ணும்",
+        "சிறப்பு தள்ளுபடி சதவீதம் மற்றும் முக்கிய பொருட்கள்"
+      ]
+    },
+    {
+      "summary": "",
+      "field": "style",
+      "question": "உங்கள் சுவரொட்டி எப்படித் தோன்ற வேண்டும்: வண்ணங்கள், பாணி மற்றும் உணர்வு எப்படி இருக்க வேண்டும்?",
+      "why": "சரியான பாணி, நடந்து செல்பவர்களின் கவனத்தை உடனே ஈர்க்க உதவும்.",
+      "suggestions": [
+        "பிரகாசமான மஞ்சள் மற்றும் சிவப்பு வண்ணங்கள், வேடிக்கையான உணர்வு",
+        "சூடான பழுப்பு நிறங்கள், பாரம்பரிய பேக்கரி தோற்றம்",
+        "எளிமையான வெள்ளை பின்னணி, சுத்தமான நவீன வடிவமைப்பு"
       ]
     }
   ],
+  "plans": [
+    {
+      "title": "Poster For Your Bakery'S Weekend Sale",
+      "deliverable": "Visual",
+      "best_tool": "chatgpt",
+      "tool_reason": "ChatGPT can create images directly.",
+      "steps": [
+        {
+          "id": "s1",
+          "label": "Your audience chosen",
+          "detail": "Families looking for weekend treats and fresh bread",
+          "owner": "you"
+        },
+        {
+          "id": "s2",
+          "label": "Your details and limits",
+          "detail": "20% off all sourdough, Saturday and Sunday only",
+          "owner": "you"
+        },
+        {
+          "id": "s3",
+          "label": "AI designs it",
+          "detail": "Layout, wording and colors from your choices.",
+          "owner": "ai"
+        },
+        {
+          "id": "s4",
+          "label": "Check against your rules",
+          "detail": "Avoids: இருண்ட அல்லது பயமுறுத்தும் நிறங்கள் வேண்டாம்",
+          "owner": "ai"
+        },
+        {
+          "id": "s5",
+          "label": "You review and use it",
+          "detail": "You approve the final result before anyone sees it.",
+          "owner": "you"
+        }
+      ],
+      "choices": [
+        {
+          "label": "Audience",
+          "value": "Families looking for weekend treats and fresh bread"
+        },
+        {
+          "label": "Key details",
+          "value": "20% off all sourdough, Saturday and Sunday only"
+        },
+        {
+          "label": "Style",
+          "value": "Bright, playful colours that catch children's eyes"
+        },
+        {
+          "label": "Format and length",
+          "value": "A4 printed poster for the shop window"
+        },
+        {
+          "label": "Avoid",
+          "value": "இருண்ட அல்லது பயமுறுத்தும் நிறங்கள் வேண்டாம்"
+        },
+        {
+          "label": "Your voice",
+          "value": "realstic cretive and also 3D"
+        }
+      ],
+      "checks": [
+        "Avoids இருண்ட அல்லது பயமுறுத்தும் நிறங்கள் வேண்டாம்",
+        "Uses only the facts you gave",
+        "Matches your chosen style"
+      ],
+      "brief": "I would like your help with the following: A poster for my bakery's weekend sale.\n\nGoal\nMake it clear, useful and effective for the people it is for.\n\nAudience\nFamilies looking for weekend treats and fresh bread\n\nKey details\n20% off all sourdough, Saturday and Sunday only\n\nFormat and length\nA4 printed poster for the shop window\n\nStyle\nBright, playful colours that catch children's eyes\n\nMust avoid\nஇருண்ட அல்லது பயமுறுத்தும் நிறங்கள் வேண்டாம்\n\nVoice\nWrite the way I talk. Here is how I describe it in my own words: \"realstic cretive and also 3D\"\nUse plain everyday words, specific details, varied sentence length and no hype. Avoid stock phrases such as 'delve', 'elevate', 'unlock' and 'seamless', and do not use em dashes.\n\nDeliverable format\nProduce the finished design as a single image, followed by the exact text used so it can be edited.\n\nBefore you finish\nCheck your result against every item under \"Must avoid\" and tell me, item by item, whether it passes. Use only the facts I have given you. If something essential is missing, ask me one question before you start.",
+      "changes": []
+    },
+    {
+      "title": "வார இறுதி விற்பனை சுவரொட்டி",
+      "deliverable": "சுவரொட்டி",
+      "best_tool": "chatgpt",
+      "tool_reason": "இந்த வேலைக்கு படம் உருவாக்கம் தேவை, அதற்கு ChatGPT சிறந்தது.",
+      "steps": [
+        {
+          "id": "s1",
+          "label": "அளவு மற்றும் தகவல் உறுதி",
+          "detail": "A3 அச்சு சுவரொட்டி, சனி, ஞாயிறு காலை 8 முதல் மாலை 6 வரை.",
+          "owner": "you"
+        },
+        {
+          "id": "s2",
+          "label": "வண்ணம் மற்றும் உணர்வு தேர்வு",
+          "detail": "பிரகாசமான மஞ்சள், சிவப்பு வண்ணங்கள் மற்றும் வேடிக்கையான உணர்வு.",
+          "owner": "you"
+        },
+        {
+          "id": "s3",
+          "label": "AI தளவமைப்பை வடிவமைக்கிறது",
+          "detail": "AI தலைப்பு, தேதி, நேரம் மற்றும் படங்களை சுவரொட்டியில் அமைக்கும்.",
+          "owner": "ai"
+        },
+        {
+          "id": "s4",
+          "label": "AI கவர்ச்சிகரமான படத்தை உருவாக்குகிறது",
+          "detail": "AI பேக்கரி பொருட்களுடன் வண்ணமயமான முக்கிய காட்சியை உருவாக்கும்.",
+          "owner": "ai"
+        },
+        {
+          "id": "s5",
+          "label": "உங்கள் விதிகளுடன் சரிபார்ப்பு",
+          "detail": "AI வடிவமைப்பை தேவைகள் மற்றும் தவிர்க்க வேண்டியவற்றுடன் ஒப்பிடும்.",
+          "owner": "ai"
+        },
+        {
+          "id": "s6",
+          "label": "மதிப்பாய்வு செய்து அச்சிடுங்கள்",
+          "detail": "தகவல்களை சரிபார்த்து, கடை முன் ஒட்ட அச்சிடுங்கள்.",
+          "owner": "you"
+        }
+      ],
+      "choices": [
+        {
+          "label": "Audience",
+          "value": "நடந்து செல்லும் குடும்பங்கள் மற்றும் அலுவலக ஊழியர்கள்"
+        },
+        {
+          "label": "Goal",
+          "value": "வார இறுதி விற்பனைக்கு மக்களை கடைக்கு வரவழைப்பது"
+        },
+        {
+          "label": "Key details",
+          "value": "சனி, ஞாயிறு, காலை 8 முதல் மாலை 6 வரை"
+        },
+        {
+          "label": "Style",
+          "value": "பிரகாசமான மஞ்சள் மற்றும் சிவப்பு, வேடிக்கையான உணர்வு"
+        },
+        {
+          "label": "Document",
+          "value": "A3 அச்சு சுவரொட்டி, கடை முன் ஒட்ட"
+        }
+      ],
+      "checks": [
+        "தேதி மற்றும் நேரம் சரியாக உள்ளதா",
+        "கடை முகவரி மற்றும் தொடர்பு எண் தெளிவாக உள்ளதா",
+        "பிரகாசமான மஞ்சள் மற்றும் சிவப்பு வண்ணங்கள் பயன்படுத்தப்பட்டுள்ளதா",
+        "A3 அளவில் படிக்க எளிதாக உள்ளதா"
+      ],
+      "changes": [],
+      "brief": "உங்களுக்கு ஒரு A3 அச்சு சுவரொட்டி வடிவமைக்க வேண்டும். இது எங்கள் பேக்கரியின் வார இறுதி விற்பனைக்கானது. கடை முன் ஒட்டப்படும், எனவே நடந்து செல்லும் குடும்பங்களும் அலுவலக ஊழியர்களும் தூரத்திலிருந்தே கவனிக்க வேண்டும்.\n\nGoal: வார இறுதி விற்பனைக்கு மக்களை கடைக்கு வரவழைப்பதே நோக்கம். ஒரே பார்வையில் விற்பனை என்ன, எப்போது என்பது புரிய வேண்டும்.\n\nAudience: நடந்து செல்லும் குடும்பங்கள் மற்றும் அலுவலக ஊழியர்கள். அவர்கள் வேகமாக கடந்து செல்வார்கள், எனவே எழுத்துகள் பெரியதாகவும் தெளிவாகவும் இருக்க வேண்டும்.\n\nKey details: சனி மற்றும் ஞாயிறு, காலை 8 முதல் மாலை 6 வரை. கடை முகவரி மற்றும் தொடர்பு எண் இன்னும் கொடுக்கப்படவில்லை. அவற்றை சுவரொட்டியில் சேர்ப்பதற்கு முன் ஒரு கேள்வி கேளுங்கள்: கடை முகவரி என்ன, தொடர்பு எண் என்ன? அவை கிடைக்கும் வரை அவற்றுக்கான இடத்தை காலியாக விட்டு வையுங்கள், கற்பனையாக எதையும் எழுத வேண்டாம்.\n\nStyle: பிரகாசமான மஞ்சள் மற்றும் சிவப்பு வண்ணங்கள். உணர்வு வேடிக்கையாகவும் வரவேற்கும் வகையிலும் இருக்க வேண்டும். பேக்கரி பொருட்களின் வண்ணமயமான படங்களைச் சேர்க்கலாம்.\n\nMust avoid: அதிக சிறிய எழுத்துகள், மங்கலான வண்ண கலவை, மிகைப்படுத்தப்பட்ட விளம்பர வாசகங்கள், தவறான தள்ளுபடி சதவீதங்கள், கற்பனையான விலைகள் அல்லது சலுகைகள்.\n\nDeliverable format: A3 அளவிலான ஒரு செங்குத்து சுவரொட்டி வடிவமைப்பு. தலைப்பு மிகப் பெரியதாக மேலே இருக்க வேண்டும், அதன் கீழ் தேதி மற்றும் நேரம், பின்னர் முகவரி மற்றும் தொடர்பு எண், கடைசியாக ஒரு முக்கிய படம். முழு வடிவமைப்பையும் ஒரே படமாக உருவாக்கவும்.\n\nVoice: எளிய, அன்றாட தமிழ் சொற்களைப் பயன்படுத்துங்கள். குறுகிய வாக்கியங்களும் நீண்ட வாக்கியங்களும் கலந்து இருக்கட்டும். நேரடியாகவும் அன்பாகவும் பேசுங்கள். \"டெல்வ்\", \"எலிவேட்\" போன்ற செயற்கையான சொற்களையும் \"அன்லாக்\", \"சீம்லெஸ்\", \"கேம்-சேஞ்சர்\" போன்ற விளம்பர வார்த்தைகளையும் தவிர்க்கவும். நீண்ட கோடுகளை (em dash) பயன்படுத்த வேண்டாம்.\n\nBefore you finish: மேலே உள்ள \"Must avoid\" பட்டியலில் உள்ள ஒவ்வொரு விஷயத்தையும் உங்கள் வடிவமைப்புடன் ஒப்பிட்டு, ஒவ்வொன்றும் பின்பற்றப்பட்டதா என்பதைக் குறிப்பிடுங்கள்."
+    }
+  ],
+  "preview": "# Healthy Hearts Workshop\n## Taller Corazones Sanos\n\n**Thursdays at 6pm** · Community Room, Flatbush Library\n\n## A calm hour for your heart\n- Ask the questions there was no time for at the doctor's office\n- Simple steps for blood pressure, food and movement\n- Tea is served. Come as you are.\n\n## Reserve your seat\n**Call 718-555-0142**\n\n## Layout\n- Date and time largest, at the top, in dark blue on a cream background\n- English left, Spanish right, equal size\n- One warm illustration of a teacup; no weight-loss imagery",
   "voice_check": {
     "eligible": true,
     "words": 58,
@@ -68,154 +285,5 @@
         "confidence": "High"
       }
     ]
-  },
-  "plans": [
-    {
-      "title": "Healthy Hearts Workshop Flyer",
-      "deliverable": "Flyer",
-      "best_tool": "chatgpt",
-      "tool_reason": "ChatGPT can generate the finished flyer as an image.",
-      "steps": [
-        {
-          "id": "s1",
-          "label": "Your audience defined",
-          "detail": "Older adults in Flatbush managing blood pressure.",
-          "owner": "you"
-        },
-        {
-          "id": "s2",
-          "label": "Your insight added",
-          "detail": "People feel rushed and embarrassed at appointments.",
-          "owner": "you"
-        },
-        {
-          "id": "s3",
-          "label": "AI writes the message",
-          "detail": "A calm headline and three short, plain sentences.",
-          "owner": "ai"
-        },
-        {
-          "id": "s4",
-          "label": "AI designs the layout",
-          "detail": "Large type, high contrast, date and phone number prominent.",
-          "owner": "ai"
-        },
-        {
-          "id": "s5",
-          "label": "Check against your rules",
-          "detail": "No jargon, no weight photos, no use of the word free.",
-          "owner": "ai"
-        },
-        {
-          "id": "s6",
-          "label": "You review and print",
-          "detail": "You approve the final flyer before anyone sees it.",
-          "owner": "you"
-        }
-      ],
-      "choices": [
-        {
-          "label": "Audience",
-          "value": "Older adults managing blood pressure"
-        },
-        {
-          "label": "Key details",
-          "value": "They feel rushed at doctor visits and embarrassed to ask basic questions"
-        },
-        {
-          "label": "Goal",
-          "value": "Call to reserve a seat"
-        },
-        {
-          "label": "Avoid",
-          "value": "Medical jargon, weight photos, the word free"
-        }
-      ],
-      "checks": [
-        "No medical jargon",
-        "No before and after photos",
-        "Does not use the word free",
-        "Phone number clearly visible",
-        "Readable from two meters away"
-      ],
-      "brief": "Goal\nCreate a printable flyer that invites people to the Healthy Hearts Workshop and gets them to call and reserve a seat.\n\nAudience\nOlder adults in Flatbush, Brooklyn, who are managing high blood pressure. Many feel rushed at doctor visits and are embarrassed to ask basic questions. The flyer should feel like a calm, respectful invitation, not a medical notice.\n\nKey details\n- Event: Healthy Hearts Workshop\n- Where: Community Room, Flatbush Library\n- When: Thursdays at 6pm\n- Topics: blood pressure, nutrition and exercise\n- Tea is served\n- RSVP by phone: 718-555-0142\n\nStyle\nWarm, plain and reassuring. Large, high-contrast type suitable for older readers. Simple layout with generous white space. One calm color accent.\n\nMust avoid\n- Medical jargon (for example \"hypertension\" or \"cardiovascular\")\n- Before and after or weight-loss imagery\n- The word \"free\"\n\nDeliverable format\nGenerate the finished flyer as a single portrait image (US Letter proportions). Then list the exact text used on the flyer so it can be edited.\n\nBefore you finish\nCheck the flyer against each item under \"Must avoid\" and report, item by item, whether it passes. Do not invent any facts that are not listed above. If something essential is missing, ask me one question before you start.",
-      "changes": []
-    },
-    {
-      "title": "Healthy Hearts Workshop Flyer (English and Spanish)",
-      "deliverable": "Flyer",
-      "best_tool": "chatgpt",
-      "tool_reason": "ChatGPT can generate the finished flyer as an image.",
-      "steps": [
-        {
-          "id": "s1",
-          "label": "Your audience defined",
-          "detail": "Older adults in Flatbush, English and Spanish speakers.",
-          "owner": "you"
-        },
-        {
-          "id": "s2",
-          "label": "Your insight added",
-          "detail": "People feel rushed and embarrassed at appointments.",
-          "owner": "you"
-        },
-        {
-          "id": "s3",
-          "label": "AI writes both languages",
-          "detail": "Matching English and Spanish text, side by side.",
-          "owner": "ai"
-        },
-        {
-          "id": "s4",
-          "label": "AI designs the layout",
-          "detail": "Date and time set extra large at the top.",
-          "owner": "ai"
-        },
-        {
-          "id": "s5",
-          "label": "Check against your rules",
-          "detail": "No jargon, no weight photos, no use of the word free or gratis.",
-          "owner": "ai"
-        },
-        {
-          "id": "s6",
-          "label": "You review and print",
-          "detail": "You approve the final flyer before anyone sees it.",
-          "owner": "you"
-        }
-      ],
-      "choices": [
-        {
-          "label": "Audience",
-          "value": "Older adults managing blood pressure, English and Spanish speakers"
-        },
-        {
-          "label": "Key details",
-          "value": "They feel rushed at doctor visits and embarrassed to ask basic questions"
-        },
-        {
-          "label": "Goal",
-          "value": "Call to reserve a seat"
-        },
-        {
-          "label": "Avoid",
-          "value": "Medical jargon, weight photos, the word free"
-        }
-      ],
-      "checks": [
-        "No medical jargon in either language",
-        "No before and after photos",
-        "Does not use free or gratis",
-        "Date and time largest text",
-        "Phone number clearly visible"
-      ],
-      "brief": "Goal\nCreate a printable bilingual (English and Spanish) flyer that invites people to the Healthy Hearts Workshop and gets them to call and reserve a seat.\n\nAudience\nOlder adults in Flatbush, Brooklyn, who are managing high blood pressure. Many speak Spanish as a first language. Many feel rushed at doctor visits and are embarrassed to ask basic questions. The flyer should feel like a calm, respectful invitation, not a medical notice.\n\nKey details\n- Event: Healthy Hearts Workshop / Taller Corazones Sanos\n- Where: Community Room, Flatbush Library\n- When: Thursdays at 6pm\n- Topics: blood pressure, nutrition and exercise\n- Tea is served\n- RSVP by phone: 718-555-0142\n\nStyle\nWarm, plain and reassuring. English and Spanish side by side with equal weight. Date and time set as the largest text at the top. Large, high-contrast type with generous white space.\n\nMust avoid\n- Medical jargon in either language\n- Before and after or weight-loss imagery\n- The words \"free\" or \"gratis\"\n\nDeliverable format\nGenerate the finished flyer as a single portrait image (US Letter proportions). Then list the exact English and Spanish text used so it can be edited.\n\nBefore you finish\nCheck the flyer against each item under \"Must avoid\" and report, item by item, whether it passes. Do not invent any facts that are not listed above. If something essential is missing, ask me one question before you start.",
-      "changes": [
-        "Added a Spanish version alongside English",
-        "Date and time moved to the top, set largest",
-        "Added gratis to the words to avoid"
-      ]
-    }
-  ],
-  "preview": "# Healthy Hearts Workshop\n## Taller Corazones Sanos\n\n**Thursdays at 6pm** \u00b7 Community Room, Flatbush Library\n\n## A calm hour for your heart\n- Ask the questions there was no time for at the doctor's office\n- Simple steps for blood pressure, food and movement\n- Tea is served. Come as you are.\n\n## Reserve your seat\n**Call 718-555-0142**\n\n## Layout\n- Date and time largest, at the top, in dark blue on a cream background\n- English left, Spanish right, equal size\n- One warm illustration of a teacup; no weight-loss imagery"
+  }
 }
