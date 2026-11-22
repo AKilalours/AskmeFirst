@@ -4,202 +4,155 @@
 
 ### Most people don't know how to talk to AI. So this AI asks first.
 
-**A few question cards on a kitchen table. A plan you can see. Expert instructions written from your own words.**
+<img src="docs/gifs/01_home.gif" width="860" alt="Ask Me First: paper cards on a warm table, tilting toward the cursor">
 
-Built in one day, solo, for the **Non-Slop Hackathon** (Pangram × Nous Research × Reducto × Modal), Brooklyn, Nov 22, 2026.
+**Cards → your voice → a plan you can see → expert instructions in ChatGPT or Claude**
 
-*Theme: "What matters when you can generate anything? Can you explain your choices?"*
+Built solo in one day · Non-Slop Hackathon · Pangram × Nous Research × Reducto × Modal · Brooklyn, Nov 22, 2026
 
-<img src="docs/screens/01-home.jpg" width="900" alt="Ask Me First home screen: a warm table with paper cards for common tasks">
+📥 [**Download the 3-minute presentation**](docs/AskMeFirst.pptx) &nbsp;·&nbsp; 🎬 [Watch the clips](#-see-it-in-motion) &nbsp;·&nbsp; 🚀 [Run it](#-run-it)
 
 </div>
-
----
-
-## 🧭 The idea in one minute
-
-A bakery owner, a nurse, a grandparent or a teacher opens ChatGPT, types *"make a poster for my sale"*, and gets something generic. The problem isn't the AI. It's that nobody told them **what to tell it**.
-
-**Ask Me First** turns that blank box into a short, friendly interview:
-
-1. **You say what you want**, in any words. Pick a card or type it, and attach an old flyer, resume or photo if you have one.
-2. **It asks up to 5 question cards**, each one about *your* thing ("Who will see your bakery's weekend sale poster?"), building on what you already said.
-3. **You see the plan** as a 3D flow showing which steps came from you and which are the AI's work. Change anything and compare versions side by side.
-4. **You leave with expert instructions** written from your own words, opened directly in ChatGPT or Claude with one click. You can preview a first draft before you go.
-
-> The output is not "a better prompt." It is **your choices, made visible**. The app never even uses the word "prompt."
 
 ---
 
 ## 🎬 See it in motion
 
-📥 **[Download the 3-minute presentation (PowerPoint, with the clips embedded)](docs/AskMeFirst.pptx)**
+<table>
+<tr>
+<td width="50%" align="center"><a href="docs/videos/02_cards.mp4"><img src="docs/gifs/02_cards.gif" alt="Question cards deal, flip and fly into the recipe box"></a><br><b>1 · It asks first</b><br>One card at a time, about <i>your</i> request</td>
+<td width="50%" align="center"><a href="docs/videos/03_voice.mp4"><img src="docs/gifs/03_voice.gif" alt="Voice card with live Pangram scan and verified stamp"></a><br><b>2 · Your voice, verified</b><br>Pangram confirms the words are yours</td>
+</tr>
+<tr>
+<td align="center"><a href="docs/videos/04_plan.mp4"><img src="docs/gifs/04_plan.gif" alt="3D plan walkthrough"></a><br><b>3 · See the plan</b><br>From you vs. AI's work, played in 3D</td>
+<td align="center"><a href="docs/videos/05_compare.mp4"><img src="docs/gifs/05_compare.gif" alt="Version 2 compared side by side with Version 1"></a><br><b>4 · Change it, compare</b><br>Version 2 opens like a book</td>
+</tr>
+<tr>
+<td colspan="2" align="center"><a href="docs/videos/06_handoff.mp4"><img src="docs/gifs/06_handoff.gif" width="620" alt="Handoff screen and draft preview"></a><br><b>5 · Take it anywhere</b><br>Preview a first draft, then one click to ChatGPT or Claude</td>
+</tr>
+</table>
 
-Real screen recordings of the app (built-in demo run). Click any clip for the full video.
+<sub>Click any clip for the full video. Recorded from the app's built-in demo run.</sub>
+
+---
+
+## 🖼️ Up close
+
+<table>
+<tr>
+<td align="center"><img src="docs/screens/02-understood.jpg" alt="Card 1 restates the request"><br><b>Checks it understood you</b></td>
+<td align="center"><img src="docs/screens/03-suggestions.jpg" alt="Suggestions when unsure"><br><b>Ideas when you're unsure</b></td>
+</tr>
+<tr>
+<td align="center"><img src="docs/screens/09-voice-verified.jpg" alt="Voice sample verified"><br><b>Verified: your own words</b></td>
+<td align="center"><img src="docs/screens/05-plan-walkthrough.jpg" alt="Plan walkthrough"><br><b>Who decided what</b></td>
+</tr>
+<tr>
+<td align="center"><img src="docs/screens/06-compare-versions.jpg" alt="Compare versions"><br><b>Every change, highlighted</b></td>
+<td align="center"><img src="docs/screens/07-draft-preview.jpg" alt="Draft preview"><br><b>A real first draft</b></td>
+</tr>
+</table>
+
+---
+
+## ✨ What makes it different
 
 | | |
-|:--:|:--:|
-| [<img src="docs/gifs/01_home.gif" width="420" alt="Home screen: paper cards tilt toward the cursor">](docs/videos/01_home.mp4)<br>**Start anywhere.** Pick a card or type any request; cards tilt in 3D under your cursor. | [<img src="docs/gifs/02_cards.gif" width="420" alt="Question cards deal, flip and fly into the recipe box">](docs/videos/02_cards.mp4)<br>**It asks first.** Cards deal from the deck, flip to explain why, offer ideas, and fly into your recipe box. |
-| [<img src="docs/gifs/03_voice.gif" width="420" alt="Voice card: live Pangram scan and verified stamp">](docs/videos/03_voice.mp4)<br>**Your voice, verified.** A scan line sweeps your words while Pangram reads them, then stamps them as yours. | [<img src="docs/gifs/04_plan.gif" width="420" alt="3D plan walkthrough">](docs/videos/04_plan.mp4)<br>**The plan plays itself.** Each step lifts toward you in 3D: your decisions, the AI's work, the checks. |
-| [<img src="docs/gifs/05_compare.gif" width="420" alt="Version 2 compared side by side with Version 1">](docs/videos/05_compare.mp4)<br>**Change it, then compare.** Version 2 opens beside Version 1 like a book. | [<img src="docs/gifs/06_handoff.gif" width="420" alt="Handoff screen and draft preview">](docs/videos/06_handoff.mp4)<br>**Take it anywhere.** Preview a first draft, then open it in ChatGPT or Claude. |
-
----
-
-## 🎴 The experience, screen by screen
-
-| | |
-|:--:|:--:|
-| <img src="docs/screens/02-understood.jpg" width="440"><br>**It checks it understood you.** Card 1 restates your request in one plain sentence, with an *Edit request* link if it got it wrong. | <img src="docs/screens/03-suggestions.jpg" width="440"><br>**"I'm not sure" is a real answer.** Three suggestions tailored to your request and earlier answers, plus a blank card to write your own. Tap several to combine them. |
-| <img src="docs/screens/04-why-flip.jpg" width="440"><br>**Every card flips over to explain why it's asking.** This quietly teaches what makes AI output good. | <img src="docs/screens/05-plan-walkthrough.jpg" width="440"><br>**The plan plays itself.** Each step lifts toward you in 3D while a caption explains it, marked *your decision* or *the AI's work*. |
-| <img src="docs/screens/09-voice-verified.jpg" width="440"><br>**Your own words, verified.** On the last card you describe your idea the way you'd tell a friend. Pangram highlights it section by section and stamps it as yours. | <img src="docs/screens/08-handoff.jpg" width="440"><br>**Ready to go.** Editable instructions, a draft preview, and one click to ChatGPT or Claude. |
-| <img src="docs/screens/06-compare-versions.jpg" width="440"><br>**Change it, then compare.** Request a change, get Version 2, and open both versions side by side like a book, with every changed step highlighted. | <img src="docs/screens/07-draft-preview.jpg" width="440"><br>**See a first draft before you leave.** A short preview of the real result on a paper sheet: a table for a budget, the exact text for a poster. |
-
-<div align="center">
-<img src="docs/screens/08-handoff.jpg" width="760"><br>
-<b>The handoff.</b> Editable instructions, plus <i>Open in ChatGPT</i> (recommended for images) or <i>Open in Claude</i> (writing and analysis). The text is pre-filled in a new chat and copied to your clipboard as a backup.
-</div>
-
-*Screenshots use the built-in demo run (a community health workshop flyer). Live runs adapt to any request.*
-
----
-
-## ✨ Interactive by design: 3D and 4D, with a reason for each
-
-The whole interface is a **kitchen table with index cards**: paper, ink and a recipe box. Paper feels human and unhurried, the opposite of slop. Every motion means something, and **everything holds still when you need to read**.
-
-| Interaction | What you feel | Why it's there |
-|---|---|---|
-| 🃏 **Cards dealt from a deck** | Each question slides off a deck on a tilted 3D table and lifts flat to face you | One question at a time is calmer than a chat box |
-| 🔄 **3D flip: "Why this matters"** | The card turns over to show one sentence explaining the question | Teaches people *how* to work with AI without a lecture |
-| 📥 **Answers fly into a recipe box** | Each answered card drops into "Your choices," and the counter ticks up | Your input visibly piles up; it's yours |
-| 🌀 **Shuffling deck while the AI thinks** | Cards riffle in 3D instead of a spinner | Waiting feels alive, not broken |
-| 🖱️ **Tilt and light** | The table tilts with your mouse; home cards tilt toward the cursor with a moving light sheen | Physical, touchable depth |
-| ⏱️ **The plan as a 4D walkthrough** | A flowing line runs along the plan path while each step lifts forward over time, with captions | Shows **how AI actually helps**: your decisions, then its work, then your review |
-| 📖 **Versions open like a book** | Version 1 and Version 2 swing open side by side, changes highlighted | You can explain every change |
-| 📄 **Draft preview unfolds** | A paper draft rotates up into view, stamped "Draft preview" | The result is real before you leave |
-| 🎙️ **Voice in, voice out** | Speak any answer; tap *Read aloud* on any card | For people who'd rather talk or listen than type or read |
-| 🌐 **Any language** | Pick from 16 languages (or type any other); the screen translates, and questions, plan, instructions, voice input and read-aloud follow. Right-to-left languages display correctly | Many people who need help most don't use English |
-| ✍️ **Live Pangram scan** | On the "Your voice" card, a ring fills toward 50 words, then a scan line sweeps your text and Pangram highlights each section, stamping *Verified: your own words* | Your real voice becomes the style guide for the AI |
-| 🔈 **Paper sounds** | Soft synthesized ticks for dealing, flipping and stamping (toggle in the corner) | Tactile feedback, with nothing to download |
-
-**Accessibility first:** large type, high contrast, real buttons (never gesture-only), keyboard support, voice optional, and full support for `prefers-reduced-motion` (the animations switch off).
-
----
-
-## 🔁 How it works
-
-```mermaid
-flowchart LR
-    A["🏠 Your request<br/>+ optional document"] --> B["📄 Reducto<br/>reads the document"]
-    A --> C["🃏 Question cards<br/>max 5, adaptive"]
-    B --> C
-    C -->|"I'm not sure"| S["💡 3 tailored suggestions<br/>+ write your own"]
-    S --> C
-    C --> P["🗺️ 3D plan<br/>From you vs AI's work"]
-    C --> W["✍️ Your voice card<br/>Pangram live scan"]
-    W --> P
-    P -->|Request changes| P2["📖 Version 2<br/>side-by-side compare"]
-    P2 --> H
-    P -->|Approve| H["📋 Expert instructions"]
-    H --> V["👁️ Draft preview"]
-    H --> O["🚀 Open in ChatGPT / Claude"]
-```
-
-### Under the hood
-
-- **The server keeps the interview on track; the AI writes it.** The backend decides which topics are still open (audience, goal, key details, style, limits, plus a one-time follow-up when an answer is vague) and enforces the 5-card cap. The model writes each question, its "why," and three suggestions as strict JSON, grounded in the request, earlier answers and any attached document.
-- **The plan is structured.** The model returns the visual plan (steps tagged `you` or `ai`, choices, quality checks) as JSON, and the full instructions in a separate tagged block, so quotation marks can never break the reply.
-- **It never stalls.** Every AI call has a time budget, a retry and a provider chain (Hermes, then Claude, then OpenAI-compatible). If everything fails, a **domain-aware safety net** (career, finance, events, education, business, visual and more) still asks relevant questions that name your request.
-- **Stage-proof.** `DEMO_MODE=1` replays a full recorded run with realistic timing if the wifi dies.
-
----
-
-## 🧪 Can I explain my choices? Yes.
-
-| Choice | Reason |
 |---|---|
-| **Cards, not a chat box** | Non-experts write requests the way they'd talk to a person and explore unsystematically (*Why Johnny Can't Prompt*, Zamfirescu-Pereira et al., CHI 2023). A guided card asks the way a good consultant would. |
-| **Five questions maximum** | Follow-up questions made AI-written documents preferred 41 to 25, and 84% of participants said they'd answer them for better results (Tix, *Follow-Up Questions Improve Documents Generated by LLMs*, 2024). Short and structured beats endless back-and-forth. |
-| **Quality checks built into every plan** | Clarifying questions raise satisfaction, but people then review less and accept more errors (Zheng et al., *Is That Clear?*, arXiv preprint, Nov 2026). So every plan carries checks drawn from your own "never" rules, and the instructions tell the AI to verify each one. |
-| **"From you" vs "AI's work" on every step** | When you can generate anything, what matters is who decided what. The plan makes authorship visible. |
-| **Pangram as a quiet badge, never a gate** | It reads only *your own* answers (50+ words, never the AI's output) and either confirms they're in your own words or politely suggests saying it your way. It never blocks, never scores, and never loops text to "beat" the detector, consistent with Pangram's stance that disclosed AI help is fine and detection shouldn't be a witch hunt. |
-| **A voice sample instead of a "humanizer"** | We never disguise AI text. The person describes their idea the way they'd tell a friend, Pangram confirms it's their own writing, and the instructions tell the AI to write in that voice (plain words, their phrasing, no stock AI phrases). Output sounds human because it's built on a real human. |
-| **Any language** | The people who benefit most often aren't English speakers. Every AI step follows the chosen language. |
-| **Hand off to ChatGPT or Claude** | Works for *any* task in *any* domain, including images. We recommend the right tool for the job instead of rebuilding it. |
-| **Paper and 3D, not neon and sparkles** | Paper is slow and human. The 3D is physical, every animation explains something, and reading moments stay still. |
-
-**Who it's for:** about half of U.S. adults (51%) say they never use AI chatbots, including roughly three in four adults 65 and older (Pew Research Center, survey of 5,119 adults, Feb 2026). Ask Me First is built for them.
+| 🃏 **Cards, not chat** | Up to 6 plain-language cards, each about your exact request |
+| 🎯 **Never misses the essentials** | Slide count, page length, date, budget… whatever your task needs |
+| 💡 **"I'm not sure" works** | 3 tailored ideas, *Use all of these*, write your own, or skip |
+| ✍️ **Your real voice** | Pangram verifies your words; the AI writes like you, not like AI |
+| 🗺️ **See the plan in 3D** | Steps marked *From you* or *AI's work*, plus checks from your own rules |
+| 🌐 **16 languages** | Screen, questions, plan, voice in and out |
+| 🚀 **Works for anything** | Flyers, resumes, budgets, research, letters, decks, images |
 
 ---
 
 ## 🧰 Built with
 
-| Tool | Its real job here |
-|---|---|
-| **Nous Research · Hermes 4** (Nous Portal API) | Primary model for questions, suggestions, plans and instructions; picks the best live Hermes model automatically |
-| **Anthropic Claude** | Backup model in the same provider chain, used whenever Hermes is unavailable |
-| **Reducto** | Parses an uploaded flyer, resume, form or photo so the questions and instructions build on it |
-| **Pangram** | Live scan of the person's own voice sample, with a per-section reading and a verified stamp |
-| **Modal** | One-command deployment of the FastAPI app (`backend/modal_app.py`) |
-| **FastAPI + one hand-written `index.html`** | No build step. CSS 3D transforms, GSAP, Web Speech API, Web Audio |
+<table>
+<tr>
+<td align="center"><b>Claude</b><br><sub>live model</sub></td>
+<td align="center"><b>Hermes 4</b><br><sub>Nous Research, primary when available</sub></td>
+<td align="center"><b>Pangram</b><br><sub>voice verification</sub></td>
+<td align="center"><b>Reducto</b><br><sub>reads your old documents</sub></td>
+<td align="center"><b>Modal</b><br><sub>deploy</sub></td>
+</tr>
+</table>
+
+<sub>FastAPI · one hand-written HTML page · CSS 3D + GSAP · Web Speech · Web Audio</sub>
 
 ---
 
-## 🚀 Run it locally
+## 🚀 Run it
 
 ```bash
-git clone git@github.com:AKilalours/AskmeFirst.git
-cd AskmeFirst/backend
-pip install -r requirements.txt
-cp .env.example .env          # add your keys (never commit .env)
-python smoke_test.py          # checks Hermes/Claude, Pangram and Reducto
-uvicorn main:app --reload --port 8000
-# open http://localhost:8000
+git clone git@github.com:AKilalours/AskmeFirst.git && cd AskmeFirst/backend
+pip install -r requirements.txt && cp .env.example .env   # add your keys
+uvicorn main:app --reload --port 8000                     # open http://localhost:8000
 ```
 
-**Keys (`backend/.env`):** `NOUS_API_KEY`, `ANTHROPIC_API_KEY` (backup), `PANGRAM_API_KEY`, `REDUCTO_API_KEY`. Keys stay on the server and never reach the browser.
-
-**Offline stage mode:** set `DEMO_MODE=1` to replay a recorded run.
-
-**Deploy:** `modal setup` then `modal deploy backend/modal_app.py`.
-
-```
-AskmeFirst/
-├── backend/
-│   ├── main.py           # API: questions, plan, preview, Pangram, Reducto, provider chain
-│   ├── fallbacks.py      # domain-aware safety-net questions and plans
-│   ├── demo_cache.json   # recorded run for DEMO_MODE
-│   ├── smoke_test.py     # one call to every service
-│   └── modal_app.py      # Modal deployment
-├── frontend/index.html   # the whole interactive UI, no build step
-└── docs/screens/         # screenshots used in this README
-```
+<sub>Offline stage mode: <code>DEMO_MODE=1</code> · Deploy: <code>modal deploy backend/modal_app.py</code> · Record your run as the demo: <code>python record_demo.py</code></sub>
 
 ---
 
-## 🔒 Security and privacy
+<details>
+<summary><b>🧪 Can I explain my choices? (click)</b></summary>
 
-- **Keys never reach the browser.** Every AI, Pangram and Reducto call goes through the server; `.env` is git-ignored.
-- **Input limits** on every field (request, answers, documents, instructions) and a **per-visitor rate limit** on AI endpoints protect the API budget.
-- **Uploads:** an allowlist of document and image types, a 15 MB cap, and temporary files deleted right after parsing.
-- **Prompt-injection guard:** uploaded documents are passed to the model as untrusted data, never as instructions.
-- **Same-origin CORS, security headers** (`nosniff`, `DENY` framing, no referrer, microphone limited to this site), and no public API docs.
-- **No internal errors leak to the page**; details stay in the server log. Run logging can be switched off with `LOG_RUNS=0`.
-- **Safe rendering:** all AI text is inserted as plain text or escaped Markdown, so model output can't inject scripts.
+| Choice | Why |
+|---|---|
+| Cards, not chat | Non-experts write to AI like they talk to a person (*Why Johnny Can't Prompt*, CHI 2023) |
+| Six questions max | Follow-up questions improve AI-written documents (Tix, 2024) |
+| Checks built in | Clarifying questions raise trust but lower scrutiny (Zheng et al., arXiv preprint, 2026) |
+| A real voice, not a humanizer | Disclose AI help, don't disguise it |
+| Paper + 3D | Paper feels human; every motion explains something and stops when you read |
 
-## 🔍 Honest notes
+Who it's for: 51% of U.S. adults never use AI chatbots, about 3 in 4 over 65 (Pew Research Center, Feb 2026).
 
-- **Which model ran:** the app records which provider answered each step (`hermes`, `claude` or `fallback`) in `backend/runs/live.jsonl`. During the hackathon build, Claude served as the live model while Hermes access was being set up.
-- **Research citations** are from the sources named above. The Zheng et al. paper is an arXiv preprint, not yet peer-reviewed.
-- **Pangram's label is a reading, not a verdict.** Detectors are less reliable on short or list-like text, which is why the app needs 50+ words and never blocks anyone.
-- **The ChatGPT and Claude buttons** pre-fill a new chat. You need to be signed in, and the text is always copied to your clipboard as a backup.
+</details>
+
+<details>
+<summary><b>🔁 How it works (click)</b></summary>
+
+```mermaid
+flowchart LR
+    A["🏠 Request + optional document"] --> B["📄 Reducto"]
+    A --> C["🃏 Question cards"]
+    B --> C
+    C --> W["✍️ Your voice · Pangram"]
+    W --> P["🗺️ 3D plan"]
+    P -->|change| P2["📖 Version 2"]
+    P2 --> H
+    P -->|approve| H["📋 Instructions"]
+    H --> V["👁️ Draft preview"]
+    H --> O["🚀 ChatGPT / Claude"]
+```
+
+The server keeps the interview on track (open topics, must-know facts, 6-card cap, no repeats, skips respected); the AI writes each question and plan as checked JSON. Every call has a timeout and a backup, so it never freezes.
+
+</details>
+
+<details>
+<summary><b>🔒 Security and privacy (click)</b></summary>
+
+Keys stay on the server · input limits and a rate limit · upload type and size limits, temp files deleted · uploaded documents treated as untrusted data · same-origin CORS and security headers · no internal errors shown · run logging can be turned off (`LOG_RUNS=0`).
+
+</details>
+
+<details>
+<summary><b>🔍 Honest notes (click)</b></summary>
+
+Claude was the live model during the build while Hermes access was being set up; the app records which model answered each step. The Zheng et al. paper is a preprint. Pangram's result is a reading, not a verdict, and never blocks anyone.
+
+</details>
 
 ---
 
 <div align="center">
 
-**Made by Akila Lourdes** · MS in AI, LIU Brooklyn
-
 *"When you can generate anything, what matters is what you chose."*
+
+**Akila Lourdes** · MS in AI, LIU Brooklyn
 
 </div>
