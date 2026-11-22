@@ -59,8 +59,8 @@ DEMO_MODE = os.getenv("DEMO_MODE", "0") == "1"
 DEMO_DELAY = float(os.getenv("DEMO_DELAY", "1.0"))
 Q_TIMEOUT = float(os.getenv("QUESTION_TIMEOUT", "25"))
 PLAN_TIMEOUT = float(os.getenv("PLAN_TIMEOUT", "55"))
-MAX_QUESTIONS = 5
-MIN_QUESTIONS = 3
+MAX_QUESTIONS = 6
+MIN_QUESTIONS = 4
 PANGRAM_MIN_WORDS = 50
 HERMES_PREFERENCE = ["hermes-4.3-36b", "hermes-4-405b", "hermes-4-70b"]
 
@@ -70,6 +70,7 @@ SLOTS = {
     "key_details": "specific facts, content or experience only this person knows (names, dates, places, numbers, history)",
     "style": "how it should look, sound or feel",
     "avoid": "anything the result must never say, show or do",
+    "format": "size, length and format: e.g. number of slides or pages, word count, dimensions, platform, duration, deadline",
     "clarify": "a short follow-up that makes the vaguest earlier answer specific (choose ONLY if an earlier answer is too vague to act on, e.g. 'event', 'stuff', 'normal')",
 }
 
@@ -115,7 +116,7 @@ def make_providers(kind: str) -> list[Provider]:
     return out
 
 
-async def call_anthropic(model: str, system: str, user: str, max_tokens: int) -> str:
+async def call_anthropic(model: str, system: str, user: str, max_tokens: int, strict: bool = True) -> str:
     import httpx
     async with httpx.AsyncClient(timeout=PLAN_TIMEOUT) as c:
         r = await c.post("https://api.anthropic.com/v1/messages",
@@ -127,7 +128,7 @@ async def call_anthropic(model: str, system: str, user: str, max_tokens: int) ->
         raise RuntimeError(f"Claude HTTP {r.status_code}: {r.text[:300]}")
     j = r.json()
     text = "".join(b.get("text", "") for b in j.get("content", []) if b.get("type") == "text")
-    if not text.strip() or j.get("stop_reason") == "max_tokens":
+    if not text.strip() or (strict and j.get("stop_reason") == "max_tokens"):
         kinds = [b.get("type") for b in j.get("content", [])]
         raise RuntimeError(f"Claude reply incomplete (stop_reason={j.get('stop_reason')}, blocks={kinds}): {text[:120]!r}")
     return text
@@ -261,6 +262,28 @@ class TranslateIn(BaseModel):
 
 
 # ---------------- shared helpers ----------------
+ESSENTIALS = {
+    "presentation": "number of slides or length of the talk; who will watch; the one key takeaway; how it will be shown (live, emailed, printed); visual style",
+    "career": "the target role or job posting; years and type of experience; top achievements with numbers; education and certifications; page length",
+    "finance": "monthly income; fixed costs; variable spending; the main goal; the time period covered",
+    "social": "which platform; how many posts and how often; who to reach; the offer or message; tone",
+    "visual": "size and format (poster, flyer, social post, print or screen); the exact text including date, time, place and contact; audience; colors and style; imagery to include or avoid",
+    "event": "date and location; number of guests; budget; occasion and atmosphere; must-haves",
+    "education": "learner age or level; session length; learning goal; materials available; teaching style",
+    "business": "the product or service; target customers; what makes it different; budget and timeline; the goal",
+    "research": "the decision to make; options already considered; budget or constraints; how the answer should be presented",
+    "writing": "recipient; purpose and desired outcome; key facts and dates; tone; length",
+    "general": "who it is for; the goal; key facts; format and length; tone",
+}
+
+
+def essentials_line(request: str) -> str:
+    return ("MUST-KNOW FACTS for this type of request: " + ESSENTIALS[categorize(request)] +
+            ". Your questions must collect every must-know fact that is not already clear from the request, answers "
+            "or document. Ask first about the most important missing one. You may combine two closely related facts "
+            "in one natural question (e.g. 'How many slides, and will you present it live or send it?').")
+
+
 def lang_line(lang: Optional[str]) -> str:
     if lang and lang.lower() not in ("english", "en"):
         return f"LANGUAGE: Write every word for the person (questions, suggestions, summary, plan, instructions) in {lang}."
@@ -314,7 +337,9 @@ Choose the single most useful remaining topic for THIS request, then write:
 - "suggestions": exactly 3 realistic answers this specific person might give, each under 10 words,
   specific to their domain and consistent with their earlier answers. Make them concrete and different
   from each other. Never generic placeholders.
-- "field": the topic key you chose (must be one of the available topics).
+- "field": the topic key that matches what your question ACTUALLY asks (must be one of the available topics).
+  Use "key_details" for any must-know fact; it may be used more than once. Never file a question under a topic it
+  is not about (a question about what to include is not "avoid").
 - "done": true only if at least 3 questions are answered and you have enough for an excellent result.
 - "summary": ONLY when no questions have been answered yet: one plain sentence, max 16 words, starting with
   "You want", restating what they want to create and for what purpose. Otherwise an empty string.
@@ -339,7 +364,7 @@ def validate_q(remaining: list[str]):
     return v
 
 
-FALLBACK_ORDER = ["audience", "purpose", "key_details", "style", "avoid"]
+FALLBACK_ORDER = ["audience", "purpose", "key_details", "format", "style", "avoid"]
 
 
 
@@ -421,7 +446,7 @@ def validate_plan(d: dict):
         raise ValueError("brief too short")
 
 
-LABEL_FOR = {"audience": "Audience", "purpose": "Goal", "key_details": "Key details", "style": "Style", "avoid": "Avoid"}
+LABEL_FOR = {"audience": "Audience", "purpose": "Goal", "key_details": "Key details", "format": "Format and length", "style": "Style", "avoid": "Avoid", "voice": "Your voice", "clarify": "Clarified"}
 
 
 def fallback_plan(body: PlanIn) -> dict:
@@ -441,6 +466,7 @@ def fallback_plan(body: PlanIn) -> dict:
              f"Goal\n{sec('purpose', 'Make it clear, useful and effective for the people it is for.')}\n\n"
              f"Audience\n{sec('audience', 'Ask me who this is for before you begin.')}\n\n"
              f"Key details\n{sec('key_details', 'Ask me for any facts you need. Do not invent names, dates, prices or credentials.')}\n\n"
+             f"Format and length\n{sec('format', 'Ask me about the length and format before you start.')}\n\n"
              f"Style\n{sec('style', 'Clear, warm and professional.')}\n\n"
              f"Must avoid\n{sec('avoid', 'Jargon, exaggerated claims and generic filler.')}{ref}\n\n"
              + (f"Voice\nWrite the way I talk. Here is how I describe it in my own words: \"{ans['voice'][:300]}\"\n"
@@ -481,7 +507,7 @@ async def llm_text(system: str, user: str, budget: float, max_tokens: int) -> tu
             break
         try:
             if p.native_anthropic:
-                txt = await asyncio.wait_for(call_anthropic(p.configured, system, user, max_tokens), timeout=left)
+                txt = await asyncio.wait_for(call_anthropic(p.configured, system, user, max_tokens, strict=False), timeout=left)
             else:
                 r = await asyncio.wait_for(p.client.chat.completions.create(
                     model=await p.model(), temperature=0.6, max_tokens=max_tokens,
@@ -499,7 +525,8 @@ async def llm_text(system: str, user: str, budget: float, max_tokens: int) -> tu
 PREVIEW_SYSTEM = """You are the assistant receiving the instructions below. Produce a short FIRST DRAFT preview of the
 deliverable so a non-technical person can see what they will get.
 - Markdown only: a title (#), short sections (##), bullet lists, and a table if the deliverable is tabular.
-- Maximum 300 words. Do not ask questions. Where a needed fact is missing, write [to be added].
+- Maximum 300 words. For long deliverables (slide decks, multi-page documents) show only the first 3 or 4
+  slides or sections, then a line "...and N more". Do not ask questions. Where a needed fact is missing, write [to be added].
 - If the deliverable is an image or visual design, give the exact text that would appear on it and a
   short "Layout" section describing placement, colors and imagery.
 - Never invent names, prices, dates or credentials that were not given."""
@@ -529,9 +556,13 @@ async def next_question(body: NextQuestionIn):
     remaining = [s for s in FALLBACK_ORDER if s not in asked]
     if len(body.history) >= MAX_QUESTIONS or not remaining:
         return NextQuestionOut(done=True, source="plan")
-    offered = remaining + (["clarify"] if len(body.history) >= 2 and "clarify" not in asked else [])
+    offered = remaining + (["key_details"] if "key_details" not in remaining else []) \
+        + (["clarify"] if len(body.history) >= 2 and "clarify" not in asked else [])
+    # the last card always covers limits if they were never asked (they power the quality checks)
+    if MAX_QUESTIONS - len(body.history) == 1 and "avoid" not in asked:
+        offered = ["avoid"]
 
-    user = context_block(body.request, body.history, body.upload_text) + "\n" + lang_line(body.lang)
+    user = context_block(body.request, body.history, body.upload_text) + "\n" + lang_line(body.lang) + "\n" + essentials_line(body.request)
     user += f"\n\nQuestions answered so far: {len(body.history)} (maximum {MAX_QUESTIONS})."
     user += "\nAvailable topics:\n" + "\n".join(f"- {k}: {SLOTS[k]}" for k in offered)
     t0 = time.time()
@@ -561,7 +592,8 @@ async def plan(body: PlanIn):
         p.update(_version=idx + 1, _source="demo")
         return p
 
-    user = context_block(body.request, body.history, body.upload_text) + "\n" + lang_line(body.lang)
+    user = context_block(body.request, body.history, body.upload_text) + "\n" + lang_line(body.lang) + "\n" + essentials_line(body.request)
+    user += "\nIn the brief, state every must-know fact that was given. For any that are still missing, tell the assistant to ask about them first."
     if body.previous_plan:
         prev = {k: v for k, v in body.previous_plan.items() if not k.startswith("_")}
         user += "\n\nPrevious plan:\n" + json.dumps(prev, ensure_ascii=False)
@@ -588,12 +620,12 @@ async def preview(body: PreviewIn):
         await asyncio.sleep(DEMO_DELAY * 1.5)
         return {"markdown": load_demo().get("preview", "# Preview\n\nA preview is not available in demo mode."), "source": "demo"}
     try:
-        md, src = await llm_text(PREVIEW_SYSTEM, f"Original request: {body.request}\n{lang_line(body.lang)}\n\nInstructions:\n{body.brief}", 40, 1500)
+        md, src = await llm_text(PREVIEW_SYSTEM, f"Original request: {body.request}\n{lang_line(body.lang)}\n\nInstructions:\n{body.brief}", 45, 3000)
         log_run("preview", {"request": body.request, "source": src})
         return {"markdown": md, "source": src}
     except Exception as e:  # noqa: BLE001
         log.error("preview failed: %s", e)
-        return JSONResponse({"error": "A preview could not be created right now. You can still open the instructions in ChatGPT or Claude."}, status_code=502)
+        return JSONResponse({"error": "A preview could not be created right now. You can still open the instructions in ChatGPT or Claude.", "detail": str(e)[:300]}, status_code=502)
 
 
 TRANSLATE_SYSTEM = """Translate the values of this JSON object for a friendly, professional app interface.

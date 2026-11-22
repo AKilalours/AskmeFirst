@@ -362,9 +362,9 @@ button:focus-visible,textarea:focus-visible,input:focus-visible{outline:3px soli
   <div class="card vcard">
     <div class="card-inner">
       <div class="face front">
-        <div class="card-top"><span class="label">Your voice</span><span class="pg-badge">Checked by Pangram</span></div>
+        <div class="card-top"><span class="label">Your voice</span></div>
         <h2 class="question">Last one: describe it the way you would tell a friend.</h2>
-        <p class="vsub">A few sentences in your own words. The AI will write in your voice, and Pangram confirms these words are yours.</p>
+        <p class="vsub">A few sentences in your own words. The AI will use them to write in your voice.</p>
         <div class="vbox"><textarea rows="4" placeholder="Just talk. There are no wrong answers."></textarea><button class="iconbtn mic" type="button" aria-label="Speak your answer"></button><div class="scan"></div></div>
         <div class="actions">
           <div class="meter"><svg viewBox="0 0 36 36"><circle class="trk" cx="18" cy="18" r="15.9"/><circle class="arc" cx="18" cy="18" r="15.9"/></svg><span class="mcount">0 of 50 words</span></div>
@@ -420,7 +420,7 @@ const $ = (s, r = document) => r.querySelector(s);
 const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
 
 const stage = $("#stage"), table = $("#table"), deck = $("#deck"), box = $("#box"), boxFront = $("#boxFront");
-const MAX_Q = 5;
+const MAX_Q = 6;
 const S = { request: "", uploadText: "", history: [], plans: [], current: 0, voice: null, busy: false, lang: "English", speech: "en-US" };
 
 const ICON = {
@@ -677,8 +677,8 @@ const UI_STRINGS = ["Describe what you would like to create, in your own words",
   "Type your answer, or use the microphone", "I'm not sure", "Continue", "A few options based on what you have shared. Tap one, or tap again to combine.",
   "Or write your own", "Use", "Skip this question", "Close", "Return to question", "Edit request", "Preparing the next question", "Building your plan",
   "Still working on your plan", "Your choices", "Your voice", "Checked by Pangram", "Last one: describe it the way you would tell a friend.",
-  "A few sentences in your own words. The AI will write in your voice, and Pangram confirms these words are yours.", "Just talk. There are no wrong answers.",
-  "Skip", "Check with Pangram", "Pangram is reading your words", "Verified: your own words", "Continue to my plan", "Rewrite in my words", "Keep as is",
+  "A few sentences in your own words. The AI will use them to write in your voice.", "Just talk. There are no wrong answers.",
+  "Skip", "Check with Pangram", "Reading your words", "Verified: your own words", "Continue to my plan", "Rewrite in my words", "Keep as is",
   "Your own words", "AI-assisted", "AI-generated", "From you", "AI's work", "Updated", "Quality checks the AI will run", "Request changes", "Approve plan",
   "What would you like to change?", "For example: add a Spanish version and make the date larger", "Cancel", "Update plan", "Updating plan...",
   "Compare versions side by side", "Close comparison", "What changed", "Play walkthrough", "Stop", "Watch how your choices become the finished result.",
@@ -761,7 +761,7 @@ function showVoiceStep() {
     const n = wordCount(ta.value);
     arc.style.strokeDasharray = `${Math.min(100, n * 2)} 100`;
     count.textContent = `${Math.min(n, 50)} of 50 words`;
-    go.textContent = n >= 50 ? "Check with Pangram" : "Continue";
+    go.textContent = "Continue";
   };
   ta.addEventListener("input", update);
   const finish = async (withVoice) => {
@@ -777,11 +777,11 @@ function showVoiceStep() {
     if (!n) { ta.focus(); return; }
     if (n < 50) return finish(true);
     // Pangram reads the person's own words, live
-    card.classList.add("scanning"); go.disabled = true; skip.disabled = true; go.textContent = "Pangram is reading your words";
+    card.classList.add("scanning"); go.disabled = true; skip.disabled = true; go.textContent = "Reading your words";
     let v = null;
     try { v = await post("/api/voice_check", { text }, 25000); } catch (e) {}
     card.classList.remove("scanning"); go.disabled = false; skip.disabled = false;
-    if (!v || !v.eligible) { toast("Pangram could not check this right now. Your words are still used as written."); go.dataset.ready = 1; go.textContent = "Continue to my plan"; return; }
+    if (!v || !v.eligible) { toast("Your words could not be checked right now. They are still used as written."); go.dataset.ready = 1; go.textContent = "Continue to my plan"; return; }
     S.voice = v;
     // show Pangram's reading, section by section
     const read = el("div", "vread");
