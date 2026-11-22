@@ -267,6 +267,46 @@ button:focus-visible,textarea:focus-visible,input:focus-visible{outline:3px soli
 .shimmer{height:14px;border-radius:7px;margin:10px 0;background:linear-gradient(90deg,#eee6d6 25%,#f8f3ea 50%,#eee6d6 75%);background-size:200% 100%;animation:shim 1.2s infinite}
 @keyframes shim{to{background-position:-200% 0}}
 
+/* language picker */
+.langwrap{position:relative;pointer-events:auto}
+.langbtn{display:flex;align-items:center;gap:6px}
+.langmenu{position:absolute;top:44px;left:0;z-index:60;width:250px;max-height:60vh;overflow:auto;padding:8px;border-radius:12px;background:var(--paper);border:1px solid var(--ink-faint);box-shadow:0 20px 40px rgba(0,0,0,.18)}
+.langmenu button{display:flex;justify-content:space-between;width:100%;padding:9px 12px;border:none;background:none;border-radius:8px;font-size:15px;text-align:left}
+.langmenu button:hover,.langmenu button.on{background:#efe7d8}
+.langmenu button span{color:var(--ink-soft);font-size:13px}
+.rtl .question,.rtl textarea,.rtl .why-text,.rtl .chip,.rtl .brief,.rtl .preview,.rtl .understood,.rtl .landing h1,.rtl .landing .sub,.rtl .ask input,.rtl .vread,.rtl .vsub{direction:rtl;text-align:right}
+/* voice card */
+.vcard .face{min-height:auto}
+.pg-badge{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ok);border:1.5px solid rgba(47,107,79,.4);border-radius:999px;padding:4px 10px}
+.vsub{margin:0 0 12px;color:var(--ink-soft);font-size:16px;line-height:1.45}
+.vbox{position:relative;display:flex;gap:10px;align-items:flex-start;border-radius:10px}
+.vbox textarea{min-height:140px}
+.scan{position:absolute;left:0;right:56px;top:0;height:0;pointer-events:none;opacity:0}
+.vcard.scanning .scan{opacity:1;height:4px;background:linear-gradient(90deg,transparent,var(--ok),transparent);box-shadow:0 0 18px 6px rgba(47,107,79,.35);animation:scan 1.1s ease-in-out infinite alternate}
+@keyframes scan{from{top:0}to{top:calc(100% - 4px)}}
+.vcard.scanning textarea{filter:saturate(.6)}
+.vread{flex:1;font-family:var(--serif);font-size:21px;line-height:1.55;padding:2px}
+.vread .seg{padding:1px 2px;border-radius:3px;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.vread .seg.human{background:rgba(47,107,79,.13);border-bottom:2px solid rgba(47,107,79,.6)}
+.vread .seg.assist{background:rgba(168,100,28,.14);border-bottom:2px solid rgba(168,100,28,.6)}
+.vread .seg.ai{background:rgba(180,68,46,.14);border-bottom:2px solid rgba(180,68,46,.6)}
+.vlegend{display:flex;gap:14px;font-size:13px;color:var(--ink-soft);margin-top:10px;flex-wrap:wrap}
+.vlegend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.meter{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--ink-soft)}
+.meter svg{width:40px;height:40px;transform:rotate(-90deg)}
+.meter circle{fill:none;stroke-width:3.4}
+.meter .trk{stroke:var(--ink-faint)} .meter .arc{stroke:var(--ok);stroke-linecap:round;stroke-dasharray:0 100;transition:stroke-dasharray .3s}
+.vstamp{position:absolute;right:30px;bottom:92px;z-index:6;padding:8px 14px;border:3px solid var(--ok);border-radius:8px;color:var(--ok);font-weight:700;font-size:15px;letter-spacing:.06em;text-transform:uppercase;background:rgba(251,248,241,.9);transform:rotate(-8deg);pointer-events:none}
+.vnote{margin-top:12px;padding:12px 14px;border-radius:10px;background:#fff6e6;border:1px solid rgba(168,100,28,.35);font-size:15px;line-height:1.45;color:var(--warn)}
+/* authorship receipt */
+.receipt{margin-top:18px;padding:16px 20px;border-radius:10px;background:#fffdf8;border:1.5px dashed rgba(31,43,69,.3);font-size:15px}
+.r-head{display:flex;justify-content:space-between;align-items:center;font-weight:600;margin-bottom:8px}
+.r-head span{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ok)}
+.r-row{display:flex;justify-content:space-between;gap:14px;padding:7px 0;border-top:1px solid var(--ink-faint);align-items:baseline}
+.r-row span{color:var(--ink-soft)} .r-row b{font-weight:600;text-align:right}
+.r-toggle{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:10px;font-size:14.5px;color:var(--ink-soft)}
+.r-toggle input[type=text]{border:1px solid var(--ink-faint);border-radius:6px;padding:5px 8px;font-size:14.5px;width:150px;background:#fff}
+
 /* toast */
 .toast{position:fixed;left:50%;bottom:26px;z-index:60;transform:translate(-50%,calc(100% + 60px));opacity:0;max-width:min(620px,92vw);background:var(--ink);color:var(--paper);
   padding:14px 22px;border-radius:12px;font-size:16px;line-height:1.4;box-shadow:0 14px 30px rgba(0,0,0,.25);transition:transform .45s cubic-bezier(.2,.8,.2,1),opacity .3s}
@@ -282,7 +322,8 @@ button:focus-visible,textarea:focus-visible,input:focus-visible{outline:3px soli
 <body>
 
 <div class="topbar">
-  <div class="brand"><i></i>Ask Me First</div>
+  <div style="display:flex;align-items:center;gap:14px;pointer-events:auto"><div class="brand"><i></i>Ask Me First</div>
+    <div class="langwrap"><button class="chipbtn langbtn" id="langBtn" type="button" aria-haspopup="true">&#127760; <span id="langName">English</span></button><div class="langmenu hidden" id="langMenu"></div></div></div>
   <div class="top-actions">
     <button class="chipbtn" id="soundBtn" aria-pressed="true">Sound on</button>
     <button class="chipbtn hidden" id="restartBtn">Start over</button>
@@ -316,6 +357,24 @@ button:focus-visible,textarea:focus-visible,input:focus-visible{outline:3px soli
 </main>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<template id="tplVoice">
+  <div class="card vcard">
+    <div class="card-inner">
+      <div class="face front">
+        <div class="card-top"><span class="label">Your voice</span><span class="pg-badge">Checked by Pangram</span></div>
+        <h2 class="question">Last one: describe it the way you would tell a friend.</h2>
+        <p class="vsub">A few sentences in your own words. The AI will write in your voice, and Pangram confirms these words are yours.</p>
+        <div class="vbox"><textarea rows="4" placeholder="Just talk. There are no wrong answers."></textarea><button class="iconbtn mic" type="button" aria-label="Speak your answer"></button><div class="scan"></div></div>
+        <div class="actions">
+          <div class="meter"><svg viewBox="0 0 36 36"><circle class="trk" cx="18" cy="18" r="15.9"/><circle class="arc" cx="18" cy="18" r="15.9"/></svg><span class="mcount">0 of 50 words</span></div>
+          <div style="display:flex;gap:10px"><button class="btn ghost vskip" type="button">Skip</button><button class="btn primary vgo" type="button">Continue</button></div>
+        </div>
+        <div class="vnote hidden"></div>
+      </div>
+    </div>
+  </div>
+</template>
 
 <template id="tplQ">
   <div class="card qcard">
@@ -362,7 +421,7 @@ const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls)
 
 const stage = $("#stage"), table = $("#table"), deck = $("#deck"), box = $("#box"), boxFront = $("#boxFront");
 const MAX_Q = 5;
-const S = { request: "", uploadText: "", history: [], plans: [], current: 0, voice: null, busy: false };
+const S = { request: "", uploadText: "", history: [], plans: [], current: 0, voice: null, busy: false, lang: "English", speech: "en-US" };
 
 const ICON = {
   mic: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>',
@@ -422,7 +481,7 @@ function attachMic(btn, field) {
   let rec = null;
   btn.addEventListener("click", () => {
     if (rec) { rec.stop(); return; }
-    rec = new SR(); rec.lang = "en-US"; rec.interimResults = true; rec.continuous = true;
+    rec = new SR(); rec.lang = S.speech; rec.interimResults = true; rec.continuous = true;
     const base = field.value.trim() ? field.value.trim() + " " : "";
     rec.onresult = e => { let t = ""; for (const r of e.results) t += r[0].transcript; field.value = base + t; };
     rec.onerror = ev => { if (ev.error === "not-allowed") toast("Microphone access was blocked. You can type instead."); };
@@ -523,8 +582,8 @@ TILES.forEach((t, i) => {
   if (t.other) b.classList.add("other");
   b.style.transform = `rotate(${[-2.5, 1.5, -1, 2, -1.5, 2.5, 1.5, -2, 1, -1.5, 2, -1][i]}deg) translateY(${i % 2 ? -5 : 0}px)`;
   b.onclick = () => {
-    if (t.other) { reqInput.value = ""; reqInput.placeholder = "Describe what you would like to create, in your own words"; }
-    else reqInput.value = t.ex;
+    if (t.other) { reqInput.value = ""; reqInput.placeholder = T("Describe what you would like to create, in your own words"); }
+    else reqInput.value = T(t.ex);
     reqInput.focus(); tick();
     if (ANIM) gsap.fromTo("#askBar", { scale: .98 }, { scale: 1, duration: .4, ease: "back.out(3)" });
   };
@@ -605,11 +664,156 @@ function showStrip() {
   if (ANIM) gsap.from(st, { y: -30, opacity: 0, duration: .5, delay: .3 });
 }
 
+/* ======================= languages ======================= */
+const LANGS = [
+  ["English", "English", "en-US"], ["Spanish", "Español", "es-ES"], ["French", "Français", "fr-FR"], ["Portuguese", "Português", "pt-BR"],
+  ["German", "Deutsch", "de-DE"], ["Chinese (Simplified)", "中文", "zh-CN"], ["Hindi", "हिन्दी", "hi-IN"], ["Tamil", "தமிழ்", "ta-IN"],
+  ["Bengali", "বাংলা", "bn-IN"], ["Arabic", "العربية", "ar-SA", true], ["Russian", "Русский", "ru-RU"], ["Korean", "한국어", "ko-KR"],
+  ["Japanese", "日本語", "ja-JP"], ["Vietnamese", "Tiếng Việt", "vi-VN"], ["Haitian Creole", "Kreyòl ayisyen", "ht-HT"], ["Urdu", "اردو", "ur-PK", true],
+];
+// Interface text that gets translated. Dynamic text uses the patterns below.
+const UI_STRINGS = ["Describe what you would like to create, in your own words", "AI, on your terms", "What would you like to create?", "Describe it in your own words. I will ask a few short questions, then prepare everything you need.",
+  "For example: a flyer for my health workshop", "Begin", "Sound on", "Sound off", "Start over", "Creating", "Read aloud", "Why this matters",
+  "Type your answer, or use the microphone", "I'm not sure", "Continue", "A few options based on what you have shared. Tap one, or tap again to combine.",
+  "Or write your own", "Use", "Skip this question", "Close", "Return to question", "Edit request", "Preparing the next question", "Building your plan",
+  "Still working on your plan", "Your choices", "Your voice", "Checked by Pangram", "Last one: describe it the way you would tell a friend.",
+  "A few sentences in your own words. The AI will write in your voice, and Pangram confirms these words are yours.", "Just talk. There are no wrong answers.",
+  "Skip", "Check with Pangram", "Pangram is reading your words", "Verified: your own words", "Continue to my plan", "Rewrite in my words", "Keep as is",
+  "Your own words", "AI-assisted", "AI-generated", "From you", "AI's work", "Updated", "Quality checks the AI will run", "Request changes", "Approve plan",
+  "What would you like to change?", "For example: add a Spanish version and make the date larger", "Cancel", "Update plan", "Updating plan...",
+  "Compare versions side by side", "Close comparison", "What changed", "Play walkthrough", "Stop", "Watch how your choices become the finished result.",
+  "Your decision.", "The AI's work.", "That is the whole plan: your decisions guide the AI, and you approve the result.",
+  "Ready", "Your instructions are ready", "Choose where to create it. The instructions are copied and opened in a new chat for you. You can still edit them below.",
+  "For the smoothest start, sign in to ChatGPT or Claude in this browser first.", "Preview a first draft here", "Drafting a preview...", "Refresh preview",
+  "Draft preview", "Open in ChatGPT", "Open in Claude", "Best for images and visual designs", "Best for writing and careful analysis", "Recommended",
+  "Back to plan", "Copy instructions", "Authorship receipt", "Draft preview (AI)", "Create a preview to check it", "Add an honest note to the result:",
+  "Your name", "with drafting help from AI", "Remove", "Reading your document", "I understand:", "Audience", "Goal", "Key details", "Style", "Avoid", "Document",
+  ...TILES.flatMap(t => [t.t, t.d].concat(t.ex ? [t.ex] : []))];
+const UI_PATTERNS = [[/^Question (\d+) of up to (\d+)$/, "Question {1} of up to {2}"], [/^(\d+) answers?$/, "{1} answers"],
+  [/^Your plan, version (\d+)$/, "Your plan, version {1}"], [/^Version (\d+)$/, "Version {1}"], [/^Version (\d+) \(latest\)$/, "Version {1} (latest)"],
+  [/^(\d+) of 50 words$/, "{1} of 50 words"]];
+const I18N = { map: null };
+function T(s) { return (I18N.map && I18N.map[s]) || s; }
+const SKIP_SEL = ".question,.why-text,.chip:not(.own),.preview,.row dd,.node b,.node p,.cmp-step b,.cmp-step p,.changes li,.stamps span,.plan-title,.reqstrip b,.vread,.u-text b,#walkText b,.doc-chip b,.r-row b";
+function tr(text) {
+  if (!I18N.map) return null;
+  const t = text.trim(); if (!t) return null;
+  if (I18N.map[t] && I18N.map[t] !== t) return text.replace(t, I18N.map[t]);
+  for (const [re, tpl] of UI_PATTERNS) { const m = t.match(re); if (m && I18N.map[tpl]) return text.replace(t, I18N.map[tpl].replace(/\{(\d)\}/g, (_, i) => m[i] || "")); }
+  return null;
+}
+function translateTree(root) {
+  if (!I18N.map || !root) return;
+  if (root.nodeType === 3) { const p = root.parentElement; if (p && !p.closest(SKIP_SEL) && !/^(SCRIPT|STYLE|TEXTAREA)$/.test(p.tagName)) { const n = tr(root.nodeValue); if (n) root.nodeValue = n; } return; }
+  if (root.nodeType !== 1 || root.closest(SKIP_SEL)) return;
+  ["placeholder", "aria-label", "title"].forEach(a => { if (root.hasAttribute && root.hasAttribute(a)) { const n = tr(root.getAttribute(a)); if (n) root.setAttribute(a, n); } });
+  root.childNodes.forEach(translateTree);
+}
+new MutationObserver(ms => ms.forEach(m => { m.addedNodes.forEach(translateTree); if (m.type === "characterData") translateTree(m.target); }))
+  .observe(document.body, { childList: true, subtree: true, characterData: true });
+
+function buildLangMenu() {
+  const menu = $("#langMenu"); menu.innerHTML = "";
+  LANGS.forEach(([name, native, code, rtl]) => {
+    const b = el("button", S.lang === name ? "on" : ""); b.type = "button";
+    b.append(el("b", null, native), el("span", null, name));
+    b.onclick = () => setLanguage(name, native, code, !!rtl);
+    menu.appendChild(b);
+  });
+  const other = el("button"); other.type = "button"; other.append(el("b", null, "Other language..."), el("span", null, ""));
+  other.onclick = () => { const n = window.prompt("Which language?"); if (n && n.trim()) setLanguage(n.trim(), n.trim(), "", false); };
+  menu.appendChild(other);
+}
+$("#langBtn").onclick = e => { e.stopPropagation(); buildLangMenu(); $("#langMenu").classList.toggle("hidden"); };
+document.addEventListener("click", e => { if (!e.target.closest(".langwrap")) $("#langMenu").classList.add("hidden"); });
+
+async function setLanguage(name, native, code, rtl) {
+  $("#langMenu").classList.add("hidden");
+  try { localStorage.setItem("amf_lang", JSON.stringify([name, native, code, rtl])); } catch (e) {}
+  if (name === "English") { if (I18N.map) location.reload(); return; }
+  S.lang = name; S.speech = code || navigator.language || "en-US";
+  $("#langName").textContent = native;
+  document.body.classList.toggle("rtl", rtl);
+  let map = null;
+  try { map = JSON.parse(localStorage.getItem("amf_i18n_" + name) || "null"); } catch (e) {}
+  if (!map) {
+    toast(`Switching to ${native}...`, 8000);
+    const strings = {}; [...UI_STRINGS, ...UI_PATTERNS.map(p => p[1])].forEach(k => strings[k] = k);
+    try {
+      const j = await post("/api/translate_ui", { lang: name, strings }, 50000);
+      map = j.strings;
+      try { localStorage.setItem("amf_i18n_" + name, JSON.stringify(map)); } catch (e) {}
+    } catch (e) { toast("The screen could not be translated right now, but questions and results will still be in " + native + "."); }
+  }
+  if (map) { I18N.map = map; translateTree(document.body); toast(native + " ✓", 1800); }
+}
+// restore a saved language
+try { const saved = JSON.parse(localStorage.getItem("amf_lang") || "null"); if (saved && saved[0] !== "English") setTimeout(() => setLanguage(...saved), 50); } catch (e) {}
+
+/* ======================= your voice (Pangram) ======================= */
+function wordCount(t) { return (t.trim().match(/\S+/g) || []).length; }
+function showVoiceStep() {
+  const card = $("#tplVoice").content.firstElementChild.cloneNode(true);
+  const ta = card.querySelector("textarea"), arc = card.querySelector(".arc"), count = card.querySelector(".mcount");
+  const go = card.querySelector(".vgo"), skip = card.querySelector(".vskip"), note = card.querySelector(".vnote"), vbox = card.querySelector(".vbox");
+  attachMic(card.querySelector(".mic"), ta);
+  const update = () => {
+    const n = wordCount(ta.value);
+    arc.style.strokeDasharray = `${Math.min(100, n * 2)} 100`;
+    count.textContent = `${Math.min(n, 50)} of 50 words`;
+    go.textContent = n >= 50 ? "Check with Pangram" : "Continue";
+  };
+  ta.addEventListener("input", update);
+  const finish = async (withVoice) => {
+    if (withVoice) S.history.push({ field: "voice", question: "Describe it the way you would tell a friend.", answer: ta.value.trim() });
+    card.querySelectorAll("button").forEach(b => b.disabled = true);
+    await flyToBox(card);
+    buildPlan();
+  };
+  skip.onclick = () => finish(false);
+  go.onclick = async () => {
+    const text = ta.value.trim(), n = wordCount(text);
+    if (go.dataset.ready) return finish(true);
+    if (!n) { ta.focus(); return; }
+    if (n < 50) return finish(true);
+    // Pangram reads the person's own words, live
+    card.classList.add("scanning"); go.disabled = true; skip.disabled = true; go.textContent = "Pangram is reading your words";
+    let v = null;
+    try { v = await post("/api/voice_check", { text }, 25000); } catch (e) {}
+    card.classList.remove("scanning"); go.disabled = false; skip.disabled = false;
+    if (!v || !v.eligible) { toast("Pangram could not check this right now. Your words are still used as written."); go.dataset.ready = 1; go.textContent = "Continue to my plan"; return; }
+    S.voice = v;
+    // show Pangram's reading, section by section
+    const read = el("div", "vread");
+    const wins = (v.windows && v.windows.length) ? v.windows : [{ text, label: v.headline || v.label }];
+    wins.forEach(w => { const cls = /human/i.test(w.label) ? "human" : /assist/i.test(w.label) ? "assist" : "ai"; read.append(el("span", "seg " + cls, w.text + " ")); });
+    const legend = el("div", "vlegend");
+    [["Your own words", "rgba(47,107,79,.6)"], ["AI-assisted", "rgba(168,100,28,.6)"], ["AI-generated", "rgba(180,68,46,.6)"]].forEach(([l, c]) => { const sp = el("span"); const i = el("i"); i.style.background = c; sp.append(i, l); legend.appendChild(sp); });
+    ta.classList.add("hidden"); card.querySelector(".mic") && card.querySelector(".mic").classList.add("hidden");
+    vbox.prepend(read); vbox.after(legend);
+    if (ANIM) gsap.from(read.querySelectorAll(".seg"), { backgroundColor: "rgba(0,0,0,0)", stagger: .25, duration: .6 });
+    if (!v.ai_like) {
+      const st = el("div", "vstamp", "✓ Verified: your own words"); card.querySelector(".face").appendChild(st);
+      tick(1, 500);
+      if (ANIM) gsap.from(st, { scale: 2.6, rotation: -30, opacity: 0, rotationX: 60, duration: .55, ease: "back.out(2)", delay: .3, transformPerspective: 800 });
+      go.dataset.ready = 1; go.textContent = "Continue to my plan";
+    } else {
+      note.classList.remove("hidden");
+      note.textContent = "Parts of this read like AI-polished text. That is completely fine, but the result will sound most like you if you say it the way you would to a friend.";
+      go.dataset.ready = 1; go.textContent = "Keep as is";
+      skip.textContent = "Rewrite in my words";
+      skip.onclick = () => { read.remove(); legend.remove(); note.classList.add("hidden"); ta.classList.remove("hidden"); card.querySelector(".mic") && card.querySelector(".mic").classList.remove("hidden");
+        delete go.dataset.ready; S.voice = null; skip.textContent = "Skip"; skip.onclick = () => finish(false); update(); ta.focus(); };
+    }
+  };
+  dealIn(card);
+}
+
 /* ======================= interview ======================= */
 async function nextQuestion() {
   shuffle(true, "Preparing the next question");
   let q;
-  try { q = await post("/api/next_question", { request: S.request, history: S.history, upload_text: S.uploadText || null }); }
+  try { q = await post("/api/next_question", { request: S.request, history: S.history, upload_text: S.uploadText || null, lang: S.lang }); }
   catch (e) {
     const asked = new Set(S.history.map(h => h.field));
     q = S.history.length >= 4 ? { done: true } : { ...(FALLBACK_Q.find(f => !asked.has(f.field)) || {}), done: !FALLBACK_Q.find(f => !asked.has(f.field)) };
@@ -617,7 +821,7 @@ async function nextQuestion() {
   }
   shuffle(false);
   S.busy = false;
-  if (q.done || S.history.length >= MAX_Q) return buildPlan();
+  if (q.done || S.history.length >= MAX_Q) return showVoiceStep();
   showQuestion(q);
 }
 
@@ -640,7 +844,7 @@ function showQuestion(q) {
   if (!("speechSynthesis" in window)) listen.remove();
   else listen.onclick = () => {
     if (speechSynthesis.speaking) { speechSynthesis.cancel(); listen.classList.remove("on"); return; }
-    const u = new SpeechSynthesisUtterance(q.question); u.rate = .95; u.lang = "en-US";
+    const u = new SpeechSynthesisUtterance(q.question); u.rate = .95; u.lang = S.speech;
     u.onend = () => listen.classList.remove("on"); listen.classList.add("on"); speechSynthesis.speak(u);
   };
 
@@ -698,10 +902,10 @@ async function buildPlan(change) {
     shuffle(true, "Building your plan");
     // Pangram reads the person's own words (50+ words), in parallel. Never blocks.
     const own = [S.request, ...S.history.filter(h => h.answer !== "Skipped").map(h => h.answer)].join(". ");
-    if (own.split(/\s+/).length >= 50) post("/api/voice_check", { text: own }).then(v => { S.voice = v; renderVoice(); }).catch(() => {});
+    if (!S.voice && own.split(/\s+/).length >= 50) post("/api/voice_check", { text: own }).then(v => { S.voice = v; renderVoice(); }).catch(() => {});
   }
   let p;
-  const body = { request: S.request, history: S.history, upload_text: S.uploadText || null, previous_plan: prev, change_request: change || null };
+  const body = { request: S.request, history: S.history, upload_text: S.uploadText || null, previous_plan: prev, change_request: change || null, lang: S.lang };
   try {
     try { p = await post("/api/plan", body, 75000); }
     catch (first) { setStatus("Still working on your plan"); p = await post("/api/plan", body, 75000); }
@@ -925,6 +1129,12 @@ function showHandoff(p) {
       <p class="sub">Choose where to create it. The instructions are copied and opened in a new chat for you. You can still edit them below.</p>
       <textarea class="brief" id="brief" aria-label="Your instructions"></textarea>
       <p class="hint">For the smoothest start, sign in to ChatGPT or Claude in this browser first.</p>
+      <div class="receipt" id="receipt">
+        <div class="r-head">Authorship receipt <span>Checked by Pangram</span></div>
+        <div class="r-row"><span>Your own words</span><b id="rcpYou"></b></div>
+        <div class="r-row"><span>Draft preview (AI)</span><b id="rcpAI">Create a preview to check it</b></div>
+        <label class="r-toggle"><input type="checkbox" id="discl"> Add an honest note to the result: <input type="text" id="disclName" placeholder="Your name"> with drafting help from AI</label>
+      </div>
       <div class="preview-wrap"><button class="btn ghost" id="previewBtn" type="button">&#128065; Preview a first draft here</button><div id="previewBox"></div></div>
       <div class="tools">
         <button class="tool" data-tool="chatgpt" type="button"><span class="logo" style="background:#10a37f">G</span><div><b>Open in ChatGPT</b><span>Best for images and visual designs</span></div></button>
@@ -943,6 +1153,18 @@ function showHandoff(p) {
     card.querySelectorAll(".tool").forEach(b => b.onclick = () => openIn(b.dataset.tool));
     $("#copyBtn").onclick = async () => { await copyText($("#brief").value); toast("Instructions copied."); };
     $("#previewBtn").onclick = () => makePreview();
+    // authorship receipt
+    const v = S.voice, yourWords = S.history.filter(h => h.answer !== "Skipped").reduce((n, h) => n + wordCount(h.answer), 0);
+    $("#rcpYou").textContent = v && v.eligible
+      ? `${yourWords} words \u00B7 Pangram: ${v.headline || v.label}${v.fraction_human != null ? " (" + Math.round(v.fraction_human * 100) + "% human)" : ""} \u2713`
+      : `${yourWords} words in your answers`;
+    if (ANIM) gsap.from("#receipt", { rotationX: -80, opacity: 0, duration: .7, delay: .6, ease: "power3.out", transformPerspective: 1000, clearProps: "transform,opacity" });
+    const DISC_RE = /\n\nHonest note\n[^\n]*$/;
+    const applyDisc = () => {
+      const b = $("#brief"); b.value = b.value.replace(DISC_RE, "");
+      if ($("#discl").checked) { const nm = $("#disclName").value.trim() || "me"; b.value += `\n\nHonest note\nEnd the result with this line: "Created by ${nm} with drafting help from AI."`; }
+    };
+    $("#discl").onchange = applyDisc; $("#disclName").oninput = () => { if ($("#discl").checked) applyDisc(); };
     $("#backPlan").onclick = () => { card.remove(); pv.classList.remove("hidden"); };
     stage.scrollTo({ top: 0 });
     tick(1, 900);
@@ -982,12 +1204,19 @@ async function makePreview() {
   btn.disabled = true; btn.textContent = "Drafting a preview...";
   box.innerHTML = '<div class="preview"><div class="shimmer" style="width:60%"></div><div class="shimmer"></div><div class="shimmer" style="width:85%"></div><div class="shimmer" style="width:70%"></div></div>';
   try {
-    const j = await post("/api/preview", { request: S.request, brief: $("#brief").value }, 50000);
+    const j = await post("/api/preview", { request: S.request, brief: $("#brief").value, lang: S.lang }, 50000);
     if (!j.markdown) throw new Error(j.error || "empty");
     box.innerHTML = '<div class="preview"><span class="stamp">Draft preview</span>' + mdToHtml(j.markdown) + "</div>";
     tick(1, 800);
     if (ANIM) gsap.from(box.firstChild, { rotationX: -70, opacity: 0, duration: .8, ease: "power3.out", transformPerspective: 1200, clearProps: "transform,opacity" });
     btn.textContent = "Refresh preview";
+    const plain = j.markdown.replace(/[#*|>-]/g, " ");
+    if (wordCount(plain) >= 50) {
+      $("#rcpAI").textContent = "Pangram is reading the draft...";
+      post("/api/voice_check", { text: plain }, 25000).then(r => {
+        $("#rcpAI").textContent = r && r.eligible ? `Pangram: ${r.headline || r.label}. Labeled honestly, not hidden.` : "Could not be checked right now";
+      }).catch(() => { $("#rcpAI").textContent = "Could not be checked right now"; });
+    }
   } catch (e) {
     box.innerHTML = ""; toast("A preview could not be created right now. You can still open the instructions in ChatGPT or Claude.");
     btn.textContent = "Preview a first draft here";

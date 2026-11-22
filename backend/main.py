@@ -222,6 +222,7 @@ class NextQuestionIn(BaseModel):
     request: str
     history: list[Turn] = []
     upload_text: Optional[str] = None
+    lang: Optional[str] = None
 
 
 class NextQuestionOut(BaseModel):
@@ -239,6 +240,7 @@ class PlanIn(BaseModel):
     request: str
     history: list[Turn] = []
     upload_text: Optional[str] = None
+    lang: Optional[str] = None
     previous_plan: Optional[dict] = None
     change_request: Optional[str] = None
 
@@ -250,9 +252,21 @@ class VoiceIn(BaseModel):
 class PreviewIn(BaseModel):
     request: str
     brief: str
+    lang: Optional[str] = None
+
+
+class TranslateIn(BaseModel):
+    lang: str
+    strings: dict
 
 
 # ---------------- shared helpers ----------------
+def lang_line(lang: Optional[str]) -> str:
+    if lang and lang.lower() not in ("english", "en"):
+        return f"LANGUAGE: Write every word for the person (questions, suggestions, summary, plan, instructions) in {lang}."
+    return "LANGUAGE: Reply in the same language the person used in their request."
+
+
 def context_block(request: str, history: list[Turn], upload_text: Optional[str]) -> str:
     lines = [f'What the person wants (their exact words): "{request.strip()}"',
              f"Type of request: {categorize(request)}"]
@@ -262,7 +276,10 @@ def context_block(request: str, history: list[Turn], upload_text: Optional[str])
     if history:
         lines.append("Their answers so far, in order:")
         for t in history:
-            lines.append(f"- [{t.field}] Q: {t.question}\n  A: {t.answer}")
+            if t.field == "voice":
+                lines.append(f"- [voice sample: how this person naturally talks, verified as their own words]\n  {t.answer}")
+            else:
+                lines.append(f"- [{t.field}] Q: {t.question}\n  A: {t.answer}")
     return "\n".join(lines)
 
 
@@ -356,6 +373,11 @@ Brief (the most important field):
 - Use the person's exact facts. Never invent names, dates, prices or credentials. Where something essential is
   missing, instruct the assistant to ask one question before starting.
 - Deliverable format states exactly what to produce (image, table, one-page document, slide outline, etc.).
+- Add a "Voice" section. If a voice sample is provided, quote one short, characteristic phrase from it and tell the
+  assistant to write the way this person talks (their vocabulary, sentence length, warmth). In all cases tell it:
+  plain everyday words, specific details over general claims, varied sentence length, no hype, and none of these
+  stock phrases: "delve", "elevate", "unlock", "seamless", "tapestry", "in today's fast-paced world",
+  "it's important to note", "game-changer"; no em dashes.
 - Before you finish: check the work against each Must avoid item and report the result.
 - Do not mention this app. Do not use the word "prompt".
 
@@ -421,6 +443,10 @@ def fallback_plan(body: PlanIn) -> dict:
              f"Key details\n{sec('key_details', 'Ask me for any facts you need. Do not invent names, dates, prices or credentials.')}\n\n"
              f"Style\n{sec('style', 'Clear, warm and professional.')}\n\n"
              f"Must avoid\n{sec('avoid', 'Jargon, exaggerated claims and generic filler.')}{ref}\n\n"
+             + (f"Voice\nWrite the way I talk. Here is how I describe it in my own words: \"{ans['voice'][:300]}\"\n"
+                if ans.get('voice') else "Voice\n")
+             + "Use plain everyday words, specific details, varied sentence length and no hype. Avoid stock phrases such as "
+               "'delve', 'elevate', 'unlock' and 'seamless', and do not use em dashes.\n\n"
              f"Deliverable format\nProduce {DELIVERABLE[cat]}.\n\n"
              "Before you finish\nCheck your result against every item under \"Must avoid\" and tell me, item by item, "
              "whether it passes. Use only the facts I have given you. If something essential is missing, ask me one "
@@ -505,7 +531,7 @@ async def next_question(body: NextQuestionIn):
         return NextQuestionOut(done=True, source="plan")
     offered = remaining + (["clarify"] if len(body.history) >= 2 and "clarify" not in asked else [])
 
-    user = context_block(body.request, body.history, body.upload_text)
+    user = context_block(body.request, body.history, body.upload_text) + "\n" + lang_line(body.lang)
     user += f"\n\nQuestions answered so far: {len(body.history)} (maximum {MAX_QUESTIONS})."
     user += "\nAvailable topics:\n" + "\n".join(f"- {k}: {SLOTS[k]}" for k in offered)
     t0 = time.time()
@@ -535,7 +561,7 @@ async def plan(body: PlanIn):
         p.update(_version=idx + 1, _source="demo")
         return p
 
-    user = context_block(body.request, body.history, body.upload_text)
+    user = context_block(body.request, body.history, body.upload_text) + "\n" + lang_line(body.lang)
     if body.previous_plan:
         prev = {k: v for k, v in body.previous_plan.items() if not k.startswith("_")}
         user += "\n\nPrevious plan:\n" + json.dumps(prev, ensure_ascii=False)
@@ -562,12 +588,31 @@ async def preview(body: PreviewIn):
         await asyncio.sleep(DEMO_DELAY * 1.5)
         return {"markdown": load_demo().get("preview", "# Preview\n\nA preview is not available in demo mode."), "source": "demo"}
     try:
-        md, src = await llm_text(PREVIEW_SYSTEM, f"Original request: {body.request}\n\nInstructions:\n{body.brief}", 40, 1500)
+        md, src = await llm_text(PREVIEW_SYSTEM, f"Original request: {body.request}\n{lang_line(body.lang)}\n\nInstructions:\n{body.brief}", 40, 1500)
         log_run("preview", {"request": body.request, "source": src})
         return {"markdown": md, "source": src}
     except Exception as e:  # noqa: BLE001
         log.error("preview failed: %s", e)
         return JSONResponse({"error": "A preview could not be created right now. You can still open the instructions in ChatGPT or Claude."}, status_code=502)
+
+
+TRANSLATE_SYSTEM = """Translate the values of this JSON object for a friendly, professional app interface.
+Keep every key unchanged. Keep any {placeholders} exactly as they are. Short, natural, plain wording.
+Inside values never use double quotation marks. Return ONLY the JSON object."""
+
+
+@app.post("/api/translate_ui")
+async def translate_ui(body: TranslateIn):
+    def v(d: dict):
+        missing = [k for k in body.strings if k not in d]
+        if len(missing) > len(body.strings) * 0.2:
+            raise ValueError(f"missing {len(missing)} keys")
+    try:
+        d, src = await llm_json("plan", TRANSLATE_SYSTEM, f"Target language: {body.lang}\n\n" + json.dumps(body.strings, ensure_ascii=False), 45, 3500, v)
+        return {"strings": {k: str(d.get(k) or body.strings[k]) for k in body.strings}, "source": src}
+    except Exception as e:  # noqa: BLE001
+        log.error("translate failed: %s", e)
+        return JSONResponse({"error": "Translation is unavailable right now."}, status_code=502)
 
 
 @app.post("/api/voice_check")
@@ -597,8 +642,14 @@ async def voice_check(body: VoiceIn):
         short = str(get("prediction_short") or "")
         headline = str(get("headline") or "")
         ai_like = short.lower() in ("ai", "mixed") or ("ai" in headline.lower() and "human" not in headline.lower())
+        wins = []
+        for w in (get("windows") or [])[:12]:
+            g = (lambda k: w.get(k)) if isinstance(w, dict) else (lambda k: getattr(w, k, None))
+            wins.append({"text": str(g("text") or ""), "label": str(g("label") or ""),
+                         "score": g("ai_assistance_score"), "confidence": str(g("confidence") or "")})
         return {"eligible": True, "words": words, "label": short, "headline": headline,
-                "fraction_human": get("fraction_human"), "ai_like": ai_like}
+                "fraction_human": get("fraction_human"), "fraction_ai": get("fraction_ai"),
+                "fraction_ai_assisted": get("fraction_ai_assisted"), "ai_like": ai_like, "windows": wins}
     except Exception as e:  # noqa: BLE001
         log.error("pangram failed: %s", e)
         return {"eligible": False, "words": words, "error": str(e)[:200]}

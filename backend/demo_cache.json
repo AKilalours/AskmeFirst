@@ -47,10 +47,27 @@
   ],
   "voice_check": {
     "eligible": true,
-    "words": 64,
+    "words": 58,
     "label": "Human",
     "headline": "Human Written",
-    "ai_like": false
+    "fraction_human": 0.97,
+    "fraction_ai": 0.0,
+    "fraction_ai_assisted": 0.03,
+    "ai_like": false,
+    "windows": [
+      {
+        "text": "Honestly most of the folks who come are older, they get told watch your pressure and then nobody shows them how.",
+        "label": "Human Written",
+        "score": 0.02,
+        "confidence": "High"
+      },
+      {
+        "text": "I want them to feel like it's just a chat over tea, nobody judging what they ate last night.",
+        "label": "Human Written",
+        "score": 0.03,
+        "confidence": "High"
+      }
+    ]
   },
   "plans": [
     {
