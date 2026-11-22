@@ -31,12 +31,27 @@ A bakery owner, a nurse, a grandparent or a teacher opens ChatGPT, types *"make 
 
 ---
 
+## 🎬 See it in motion
+
+📥 **[Download the 3-minute presentation (PowerPoint, with the clips embedded)](docs/AskMeFirst.pptx)**
+
+Real screen recordings of the app (built-in demo run). Click any clip for the full video.
+
+| | |
+|:--:|:--:|
+| [<img src="docs/gifs/01_home.gif" width="420" alt="Home screen: paper cards tilt toward the cursor">](docs/videos/01_home.mp4)<br>**Start anywhere.** Pick a card or type any request; cards tilt in 3D under your cursor. | [<img src="docs/gifs/02_cards.gif" width="420" alt="Question cards deal, flip and fly into the recipe box">](docs/videos/02_cards.mp4)<br>**It asks first.** Cards deal from the deck, flip to explain why, offer ideas, and fly into your recipe box. |
+| [<img src="docs/gifs/03_voice.gif" width="420" alt="Voice card: live Pangram scan and verified stamp">](docs/videos/03_voice.mp4)<br>**Your voice, verified.** A scan line sweeps your words while Pangram reads them, then stamps them as yours. | [<img src="docs/gifs/04_plan.gif" width="420" alt="3D plan walkthrough">](docs/videos/04_plan.mp4)<br>**The plan plays itself.** Each step lifts toward you in 3D: your decisions, the AI's work, the checks. |
+| [<img src="docs/gifs/05_compare.gif" width="420" alt="Version 2 compared side by side with Version 1">](docs/videos/05_compare.mp4)<br>**Change it, then compare.** Version 2 opens beside Version 1 like a book. | [<img src="docs/gifs/06_handoff.gif" width="420" alt="Handoff screen and draft preview">](docs/videos/06_handoff.mp4)<br>**Take it anywhere.** Preview a first draft, then open it in ChatGPT or Claude. |
+
+---
+
 ## 🎴 The experience, screen by screen
 
 | | |
 |:--:|:--:|
 | <img src="docs/screens/02-understood.jpg" width="440"><br>**It checks it understood you.** Card 1 restates your request in one plain sentence, with an *Edit request* link if it got it wrong. | <img src="docs/screens/03-suggestions.jpg" width="440"><br>**"I'm not sure" is a real answer.** Three suggestions tailored to your request and earlier answers, plus a blank card to write your own. Tap several to combine them. |
 | <img src="docs/screens/04-why-flip.jpg" width="440"><br>**Every card flips over to explain why it's asking.** This quietly teaches what makes AI output good. | <img src="docs/screens/05-plan-walkthrough.jpg" width="440"><br>**The plan plays itself.** Each step lifts toward you in 3D while a caption explains it, marked *your decision* or *the AI's work*. |
+| <img src="docs/screens/09-voice-verified.jpg" width="440"><br>**Your own words, verified.** On the last card you describe your idea the way you'd tell a friend. Pangram highlights it section by section and stamps it as yours. | <img src="docs/screens/08-handoff.jpg" width="440"><br>**Ready to go.** Editable instructions, a draft preview, and one click to ChatGPT or Claude. |
 | <img src="docs/screens/06-compare-versions.jpg" width="440"><br>**Change it, then compare.** Request a change, get Version 2, and open both versions side by side like a book, with every changed step highlighted. | <img src="docs/screens/07-draft-preview.jpg" width="440"><br>**See a first draft before you leave.** A short preview of the real result on a paper sheet: a table for a budget, the exact text for a poster. |
 
 <div align="center">
