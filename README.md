@@ -162,6 +162,16 @@ AskmeFirst/
 
 ---
 
+## 🔒 Security and privacy
+
+- **Keys never reach the browser.** Every AI, Pangram and Reducto call goes through the server; `.env` is git-ignored.
+- **Input limits** on every field (request, answers, documents, instructions) and a **per-visitor rate limit** on AI endpoints protect the API budget.
+- **Uploads:** an allowlist of document and image types, a 15 MB cap, and temporary files deleted right after parsing.
+- **Prompt-injection guard:** uploaded documents are passed to the model as untrusted data, never as instructions.
+- **Same-origin CORS, security headers** (`nosniff`, `DENY` framing, no referrer, microphone limited to this site), and no public API docs.
+- **No internal errors leak to the page**; details stay in the server log. Run logging can be switched off with `LOG_RUNS=0`.
+- **Safe rendering:** all AI text is inserted as plain text or escaped Markdown, so model output can't inject scripts.
+
 ## 🔍 Honest notes
 
 - **Which model ran:** the app records which provider answered each step (`hermes`, `claude` or `fallback`) in `backend/runs/live.jsonl`. During the hackathon build, Claude served as the live model while Hermes access was being set up.

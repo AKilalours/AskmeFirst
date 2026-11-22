@@ -390,7 +390,7 @@ button:focus-visible,textarea:focus-visible,input:focus-visible{outline:3px soli
           <button class="iconbtn mic" type="button" aria-label="Speak your answer"></button>
         </div>
         <div class="actions">
-          <button class="btn ghost unsure" type="button">I'm not sure</button>
+          <div style="display:flex;gap:16px;align-items:center"><button class="btn ghost unsure" type="button">I'm not sure</button><button class="linkbtn skipq" type="button">Skip</button></div>
           <button class="btn primary next" type="button">Continue</button>
         </div>
         <div class="suggest hidden">
@@ -490,10 +490,11 @@ function attachMic(btn, field) {
   });
 }
 
-async function post(path, body, ms = 25000) {
+async function post(path, body, ms = 50000) {
   const ctrl = new AbortController(); const t = setTimeout(() => ctrl.abort(), ms);
   try {
     const r = await fetch(API + path, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body), signal: ctrl.signal });
+    if (r.status === 429) { toast("Many requests at once. Please wait a moment and try again."); throw new Error("HTTP 429"); }
     if (!r.ok) throw new Error("HTTP " + r.status);
     return await r.json();
   } finally { clearTimeout(t); }
@@ -740,7 +741,7 @@ async function setLanguage(name, native, code, rtl) {
     toast(`Switching to ${native}...`, 8000);
     const strings = {}; [...UI_STRINGS, ...UI_PATTERNS.map(p => p[1])].forEach(k => strings[k] = k);
     try {
-      const j = await post("/api/translate_ui", { lang: name, strings }, 50000);
+      const j = await post("/api/translate_ui", { lang: name, strings }, 85000);
       map = j.strings;
       try { localStorage.setItem("amf_i18n_" + name, JSON.stringify(map)); } catch (e) {}
     } catch (e) { toast("The screen could not be translated right now, but questions and results will still be in " + native + "."); }
@@ -874,6 +875,7 @@ function showQuestion(q) {
   card.querySelector(".unsure").onclick = openSuggest;
   card.querySelector(".close").onclick = closeSuggest;
   card.querySelector(".skip").onclick = () => answer(card, q, "Skipped");
+  card.querySelector(".skipq").onclick = () => answer(card, q, "Skipped");
 
   const go = () => {
     const a = ta.value.trim();
@@ -907,8 +909,8 @@ async function buildPlan(change) {
   let p;
   const body = { request: S.request, history: S.history, upload_text: S.uploadText || null, previous_plan: prev, change_request: change || null, lang: S.lang };
   try {
-    try { p = await post("/api/plan", body, 75000); }
-    catch (first) { setStatus("Still working on your plan"); p = await post("/api/plan", body, 75000); }
+    try { p = await post("/api/plan", body, 100000); }
+    catch (first) { setStatus("Still working on your plan"); p = await post("/api/plan", body, 100000); }
   } catch (e) {
     shuffle(false); S.busy = false;
     toast("The plan is taking longer than expected. Please try again.");
@@ -1186,7 +1188,7 @@ async function makePreview() {
   btn.disabled = true; btn.textContent = "Drafting a preview...";
   box.innerHTML = '<div class="preview"><div class="shimmer" style="width:60%"></div><div class="shimmer"></div><div class="shimmer" style="width:85%"></div><div class="shimmer" style="width:70%"></div></div>';
   try {
-    const j = await post("/api/preview", { request: S.request, brief: $("#brief").value, lang: S.lang }, 50000);
+    const j = await post("/api/preview", { request: S.request, brief: $("#brief").value, lang: S.lang }, 70000);
     if (!j.markdown) throw new Error(j.error || "empty");
     box.innerHTML = '<div class="preview"><span class="stamp">Draft preview</span>' + mdToHtml(j.markdown) + "</div>";
     tick(1, 800);
