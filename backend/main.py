@@ -389,11 +389,19 @@ def too_similar(q: str, previous: list[str], request: str = "") -> bool:
     return False
 
 
+def _near_identical(a: str, b: str, request: str) -> bool:
+    drop = set(re.findall(r"\w+", request.lower()))
+    x, y = _words(a, drop), _words(b, drop)
+    return bool(x and y) and len(x & y) / len(x | y) >= 0.7
+
+
 def validate_q(remaining: list[str], previous: Optional[list] = None, request: str = ""):
-    previous = previous or []
+    previous = previous or []  # list of (field, question)
 
     def v(d: dict):
-        if too_similar(str(d.get("question", "")), previous, request):
+        q, f = str(d.get("question", "")), d.get("field")
+        same_topic = [pq for pf, pq in previous if pf == f]
+        if too_similar(q, same_topic, request) or any(_near_identical(q, pq, request) for _, pq in previous):
             raise ValueError("repeats an earlier question")
         if not str(d.get("question", "")).strip() or not str(d.get("why", "")).strip():
             raise ValueError("missing question/why")
@@ -648,7 +656,7 @@ async def next_question(body: NextQuestionIn):
     user += "\n\n" + lang_line(body.lang) + " This applies even if earlier questions or answers were in another language. The JSON keys and the field value stay in English."
     t0 = time.time()
     try:
-        d, src = await llm_json("q", Q_SYSTEM, user, Q_TIMEOUT, 3000, validate_q(offered, [t.question for t in body.history], body.request))
+        d, src = await llm_json("q", Q_SYSTEM, user, Q_TIMEOUT, 3000, validate_q(offered, [(t.field, t.question) for t in body.history], body.request))
         done = bool(d.get("done")) and len(body.history) >= MIN_QUESTIONS
         summary = str(d.get("summary") or "").strip() if not body.history else ""
         out = NextQuestionOut(summary=summary, question=d["question"].strip(), why=d["why"].strip(), field=d["field"],

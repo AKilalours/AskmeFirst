@@ -157,7 +157,7 @@ def categorize(request: str) -> str:
 
 def your_thing(request: str) -> str:
     t = request.strip().rstrip(".?!")
-    t = re.sub(r"^(please\s+)?(can you\s+)?(help me\s+)?(i want to|i need to|i'd like to|i would like to|i want)?\s*"
+    t = re.sub(r"^(please\s+)?(can you\s+)?(help me\s+)?(i wanted to|i want to|i need to|i'd like to|i would like to|i wanted|i want|i need)?\s*"
                r"(make|create|write|design|build|plan|do|draft|prepare|update|research|get|find|start|launch|organize|set up|put together|come up with|figure out|improve|fix)?\s*", "", t, flags=re.I)
     t = re.sub(r"^(a|an|the|my|some)\s+", "", t, flags=re.I)
     t = re.sub(r"\bmy\b", "your", t, flags=re.I)
@@ -169,7 +169,13 @@ def your_thing(request: str) -> str:
     return short if short.lower().startswith("your ") else "your " + short
 
 
+NOUN = {"career": "your resume", "presentation": "your presentation", "finance": "your budget", "social": "your posts",
+        "visual": "your design", "event": "your event", "education": "your lesson", "business": "your plan",
+        "research": "your research", "writing": "your message", "general": "it"}
+
+
 def fallback_question(request: str, slot: str) -> tuple[str, str, list[str]]:
     cat = categorize(request)
     q, sugg = BANK.get(cat, BANK["general"]).get(slot, BANK["general"][slot])
-    return q.replace("{T}", your_thing(request)), WHY[slot], list(sugg)
+    q = q.replace("{T}", NOUN.get(cat, "it"))
+    return q[0].upper() + q[1:], WHY[slot], list(sugg)
