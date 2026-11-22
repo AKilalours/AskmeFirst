@@ -65,7 +65,6 @@ The whole interface is a **kitchen table with index cards**: paper, ink and a re
 | 🎙️ **Voice in, voice out** | Speak any answer; tap *Read aloud* on any card | For people who'd rather talk or listen than type or read |
 | 🌐 **Any language** | Pick from 16 languages (or type any other); the screen translates, and questions, plan, instructions, voice input and read-aloud follow. Right-to-left languages display correctly | Many people who need help most don't use English |
 | ✍️ **Live Pangram scan** | On the "Your voice" card, a ring fills toward 50 words, then a scan line sweeps your text and Pangram highlights each section, stamping *Verified: your own words* | Your real voice becomes the style guide for the AI |
-| 🧾 **Authorship receipt** | The final card shows Pangram's reading of your words and, honestly, of the AI draft, plus an optional "Created by [name] with drafting help from AI" line | Disclosure, not disguise |
 | 🔈 **Paper sounds** | Soft synthesized ticks for dealing, flipping and stamping (toggle in the corner) | Tactile feedback, with nothing to download |
 
 **Accessibility first:** large type, high contrast, real buttons (never gesture-only), keyboard support, voice optional, and full support for `prefers-reduced-motion` (the animations switch off).
@@ -88,7 +87,6 @@ flowchart LR
     P2 --> H
     P -->|Approve| H["📋 Expert instructions"]
     H --> V["👁️ Draft preview"]
-    H --> R["🧾 Authorship receipt<br/>Pangram, honest labels"]
     H --> O["🚀 Open in ChatGPT / Claude"]
 ```
 
@@ -110,7 +108,7 @@ flowchart LR
 | **Quality checks built into every plan** | Clarifying questions raise satisfaction, but people then review less and accept more errors (Zheng et al., *Is That Clear?*, arXiv preprint, Nov 2026). So every plan carries checks drawn from your own "never" rules, and the instructions tell the AI to verify each one. |
 | **"From you" vs "AI's work" on every step** | When you can generate anything, what matters is who decided what. The plan makes authorship visible. |
 | **Pangram as a quiet badge, never a gate** | It reads only *your own* answers (50+ words, never the AI's output) and either confirms they're in your own words or politely suggests saying it your way. It never blocks, never scores, and never loops text to "beat" the detector, consistent with Pangram's stance that disclosed AI help is fine and detection shouldn't be a witch hunt. |
-| **A voice sample instead of a "humanizer"** | We never disguise AI text. The person describes their idea the way they'd tell a friend, Pangram confirms it's their own writing, and the instructions tell the AI to write in that voice (plain words, their phrasing, no stock AI phrases). Output sounds human because it's built on a real human, and the receipt labels AI help honestly. |
+| **A voice sample instead of a "humanizer"** | We never disguise AI text. The person describes their idea the way they'd tell a friend, Pangram confirms it's their own writing, and the instructions tell the AI to write in that voice (plain words, their phrasing, no stock AI phrases). Output sounds human because it's built on a real human. |
 | **Any language** | The people who benefit most often aren't English speakers. Every AI step follows the chosen language. |
 | **Hand off to ChatGPT or Claude** | Works for *any* task in *any* domain, including images. We recommend the right tool for the job instead of rebuilding it. |
 | **Paper and 3D, not neon and sparkles** | Paper is slow and human. The 3D is physical, every animation explains something, and reading moments stay still. |
@@ -126,7 +124,7 @@ flowchart LR
 | **Nous Research · Hermes 4** (Nous Portal API) | Primary model for questions, suggestions, plans and instructions; picks the best live Hermes model automatically |
 | **Anthropic Claude** | Backup model in the same provider chain, used whenever Hermes is unavailable |
 | **Reducto** | Parses an uploaded flyer, resume, form or photo so the questions and instructions build on it |
-| **Pangram** | Live scan of the person's own voice sample (per-section reading and a verified stamp), plus an honest label on the AI draft in the authorship receipt |
+| **Pangram** | Live scan of the person's own voice sample, with a per-section reading and a verified stamp |
 | **Modal** | One-command deployment of the FastAPI app (`backend/modal_app.py`) |
 | **FastAPI + one hand-written `index.html`** | No build step. CSS 3D transforms, GSAP, Web Speech API, Web Audio |
 

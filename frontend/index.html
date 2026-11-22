@@ -1129,12 +1129,6 @@ function showHandoff(p) {
       <p class="sub">Choose where to create it. The instructions are copied and opened in a new chat for you. You can still edit them below.</p>
       <textarea class="brief" id="brief" aria-label="Your instructions"></textarea>
       <p class="hint">For the smoothest start, sign in to ChatGPT or Claude in this browser first.</p>
-      <div class="receipt" id="receipt">
-        <div class="r-head">Authorship receipt <span>Checked by Pangram</span></div>
-        <div class="r-row"><span>Your own words</span><b id="rcpYou"></b></div>
-        <div class="r-row"><span>Draft preview (AI)</span><b id="rcpAI">Create a preview to check it</b></div>
-        <label class="r-toggle"><input type="checkbox" id="discl"> Add an honest note to the result: <input type="text" id="disclName" placeholder="Your name"> with drafting help from AI</label>
-      </div>
       <div class="preview-wrap"><button class="btn ghost" id="previewBtn" type="button">&#128065; Preview a first draft here</button><div id="previewBox"></div></div>
       <div class="tools">
         <button class="tool" data-tool="chatgpt" type="button"><span class="logo" style="background:#10a37f">G</span><div><b>Open in ChatGPT</b><span>Best for images and visual designs</span></div></button>
@@ -1153,18 +1147,6 @@ function showHandoff(p) {
     card.querySelectorAll(".tool").forEach(b => b.onclick = () => openIn(b.dataset.tool));
     $("#copyBtn").onclick = async () => { await copyText($("#brief").value); toast("Instructions copied."); };
     $("#previewBtn").onclick = () => makePreview();
-    // authorship receipt
-    const v = S.voice, yourWords = S.history.filter(h => h.answer !== "Skipped").reduce((n, h) => n + wordCount(h.answer), 0);
-    $("#rcpYou").textContent = v && v.eligible
-      ? `${yourWords} words \u00B7 Pangram: ${v.headline || v.label}${v.fraction_human != null ? " (" + Math.round(v.fraction_human * 100) + "% human)" : ""} \u2713`
-      : `${yourWords} words in your answers`;
-    if (ANIM) gsap.from("#receipt", { rotationX: -80, opacity: 0, duration: .7, delay: .6, ease: "power3.out", transformPerspective: 1000, clearProps: "transform,opacity" });
-    const DISC_RE = /\n\nHonest note\n[^\n]*$/;
-    const applyDisc = () => {
-      const b = $("#brief"); b.value = b.value.replace(DISC_RE, "");
-      if ($("#discl").checked) { const nm = $("#disclName").value.trim() || "me"; b.value += `\n\nHonest note\nEnd the result with this line: "Created by ${nm} with drafting help from AI."`; }
-    };
-    $("#discl").onchange = applyDisc; $("#disclName").oninput = () => { if ($("#discl").checked) applyDisc(); };
     $("#backPlan").onclick = () => { card.remove(); pv.classList.remove("hidden"); };
     stage.scrollTo({ top: 0 });
     tick(1, 900);
@@ -1210,13 +1192,6 @@ async function makePreview() {
     tick(1, 800);
     if (ANIM) gsap.from(box.firstChild, { rotationX: -70, opacity: 0, duration: .8, ease: "power3.out", transformPerspective: 1200, clearProps: "transform,opacity" });
     btn.textContent = "Refresh preview";
-    const plain = j.markdown.replace(/[#*|>-]/g, " ");
-    if (wordCount(plain) >= 50) {
-      $("#rcpAI").textContent = "Pangram is reading the draft...";
-      post("/api/voice_check", { text: plain }, 25000).then(r => {
-        $("#rcpAI").textContent = r && r.eligible ? `Pangram: ${r.headline || r.label}. Labeled honestly, not hidden.` : "Could not be checked right now";
-      }).catch(() => { $("#rcpAI").textContent = "Could not be checked right now"; });
-    }
   } catch (e) {
     box.innerHTML = ""; toast("A preview could not be created right now. You can still open the instructions in ChatGPT or Claude.");
     btn.textContent = "Preview a first draft here";
