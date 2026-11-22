@@ -124,7 +124,12 @@ async def call_anthropic(model: str, system: str, user: str, max_tokens: int) ->
                                "messages": [{"role": "user", "content": user}]})
     if r.status_code >= 400:
         raise RuntimeError(f"Claude HTTP {r.status_code}: {r.text[:300]}")
-    return "".join(b.get("text", "") for b in r.json().get("content", []) if b.get("type") == "text")
+    j = r.json()
+    text = "".join(b.get("text", "") for b in j.get("content", []) if b.get("type") == "text")
+    if not text.strip() or j.get("stop_reason") == "max_tokens":
+        kinds = [b.get("type") for b in j.get("content", [])]
+        raise RuntimeError(f"Claude reply incomplete (stop_reason={j.get('stop_reason')}, blocks={kinds}): {text[:120]!r}")
+    return text
 
 
 PROVIDERS = {"q": make_providers("q"), "plan": make_providers("plan")}
@@ -139,17 +144,18 @@ def extract_json(text: str) -> dict:
     m = re.search(r"\{.*\}", text, flags=re.S)
     if not m:
         raise ValueError(f"no JSON in output: {text[:200]!r}")
-    return json.loads(m.group(0))
+    return json.loads(m.group(0), strict=False)
 
 
 async def call_provider(p: Provider, system: str, user: str, max_tokens: int, validate) -> dict:
+    parse = parse_plan_text if system is PLAN_SYSTEM else extract_json
     if p.native_anthropic:
-        data = extract_json(await call_anthropic(p.configured, system, user, max_tokens))
+        data = parse(await call_anthropic(p.configured, system, user, max_tokens))
         validate(data)
         return data
     kwargs = dict(temperature=0.6, max_tokens=max_tokens,
                   messages=[{"role": "system", "content": system}, {"role": "user", "content": user}])
-    if p.json_mode:
+    if p.json_mode and system is not PLAN_SYSTEM:
         kwargs["response_format"] = {"type": "json_object"}
     try:
         r = await p.client.chat.completions.create(model=await p.model(), **kwargs)
@@ -161,7 +167,7 @@ async def call_provider(p: Provider, system: str, user: str, max_tokens: int, va
         p.resolved = None
         p.configured = "auto"
         r = await p.client.chat.completions.create(model=await p.model(), **kwargs)
-    data = extract_json(r.choices[0].message.content)
+    data = parse(r.choices[0].message.content)
     validate(data)
     return data
 
@@ -192,6 +198,8 @@ async def llm_json(kind: str, system: str, user: str, budget: float, max_tokens:
             except Exception as e:  # noqa: BLE001
                 last = e
                 log.warning("%s attempt %d failed: %s", p.name, attempt + 1, e)
+                if attempt == 0:
+                    await asyncio.sleep(0.8)
     raise last or RuntimeError("all providers failed")
 
 
@@ -222,6 +230,7 @@ class NextQuestionOut(BaseModel):
     suggestions: list[str] = []
     done: bool = False
     source: str = "ai"
+    error: str = ""
 
 
 class PlanIn(BaseModel):
@@ -321,7 +330,6 @@ Return ONLY JSON with exactly these keys:
   "steps": [ {"id": "s1", "label": "max 5 words", "detail": "one sentence, max 14 words, specific to them", "owner": "you" or "ai"} ],
   "choices": [ {"label": "Audience|Goal|Key details|Style|Avoid|Document", "value": "their choice in their own words, max 14 words"} ],
   "checks": ["3 to 5 concrete quality checks drawn from their answers, each max 10 words"],
-  "brief": "the full instructions (rules below)",
   "changes": ["only when revising: each change made, max 12 words; otherwise an empty list"]
 }
 
@@ -341,7 +349,26 @@ Brief (the most important field):
 - Do not mention this app. Do not use the word "prompt".
 
 When a previous plan and a change request are provided, apply the change, keep everything else stable,
-and list the changes."""
+and list the changes.
+
+Inside JSON string values never use double quotation marks; use single quotes instead.
+
+OUTPUT FORMAT (strict): first the JSON object above (WITHOUT a brief key), then on a new line the full brief
+wrapped exactly like this:
+<brief>
+...the instructions...
+</brief>"""
+
+
+def parse_plan_text(text: str) -> dict:
+    text = re.sub(r"<think>.*?</think>", "", text or "", flags=re.S)
+    m = re.search(r"<brief>(.*?)(</brief>|$)", text, flags=re.S)
+    brief = m.group(1).strip() if m else ""
+    head = text[:m.start()] if m else text
+    d = extract_json(head)
+    if brief:
+        d["brief"] = brief
+    return d
 
 
 def validate_plan(d: dict):
@@ -437,7 +464,7 @@ async def next_question(body: NextQuestionIn):
     user += "\nAvailable topics:\n" + "\n".join(f"- {k}: {SLOTS[k]}" for k in remaining)
     t0 = time.time()
     try:
-        d, src = await llm_json("q", Q_SYSTEM, user, Q_TIMEOUT, 450, validate_q(remaining))
+        d, src = await llm_json("q", Q_SYSTEM, user, Q_TIMEOUT, 1200, validate_q(remaining))
         done = bool(d.get("done")) and len(body.history) >= MIN_QUESTIONS
         out = NextQuestionOut(question=d["question"].strip(), why=d["why"].strip(), field=d["field"],
                               suggestions=d["suggestions"], done=done, source=src)
@@ -445,7 +472,7 @@ async def next_question(body: NextQuestionIn):
         log.error("question fallback: %s", e)
         slot = remaining[0]
         q, w, s = fallback_question(body.request, slot)
-        out = NextQuestionOut(question=q, why=w, field=slot, suggestions=s, source="fallback")
+        out = NextQuestionOut(question=q, why=w, field=slot, suggestions=s, source="fallback", error=str(e)[:300])
     log.info("next_question %s via %s in %.1fs", out.field, out.source, time.time() - t0)
     log_run("question", {"request": body.request, "history": [t.model_dump() for t in body.history], "out": out.model_dump()})
     return out
@@ -469,12 +496,13 @@ async def plan(body: PlanIn):
     version = int((body.previous_plan or {}).get("_version", 0)) + 1
     t0 = time.time()
     try:
-        p, src = await llm_json("plan", PLAN_SYSTEM, user, PLAN_TIMEOUT, 1500, validate_plan)
+        p, src = await llm_json("plan", PLAN_SYSTEM, user, PLAN_TIMEOUT, 4000, validate_plan)
         p["_source"] = src
     except Exception as e:  # noqa: BLE001
         log.error("plan fallback: %s", e)
         p = fallback_plan(body)
         p["_source"] = "fallback"
+        p["_error"] = str(e)[:300]
     p["_version"] = version
     log.info("plan v%d via %s in %.1fs", version, p["_source"], time.time() - t0)
     log_run("plan", {"request": body.request, "change": body.change_request, "out": p})
