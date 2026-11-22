@@ -70,6 +70,7 @@ SLOTS = {
     "key_details": "specific facts, content or experience only this person knows (names, dates, places, numbers, history)",
     "style": "how it should look, sound or feel",
     "avoid": "anything the result must never say, show or do",
+    "clarify": "a short follow-up that makes the vaguest earlier answer specific (choose ONLY if an earlier answer is too vague to act on, e.g. 'event', 'stuff', 'normal')",
 }
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
@@ -224,6 +225,7 @@ class NextQuestionIn(BaseModel):
 
 
 class NextQuestionOut(BaseModel):
+    summary: str = ""
     question: str = ""
     why: str = ""
     field: str = ""
@@ -243,6 +245,11 @@ class PlanIn(BaseModel):
 
 class VoiceIn(BaseModel):
     text: str
+
+
+class PreviewIn(BaseModel):
+    request: str
+    brief: str
 
 
 # ---------------- shared helpers ----------------
@@ -292,8 +299,12 @@ Choose the single most useful remaining topic for THIS request, then write:
   from each other. Never generic placeholders.
 - "field": the topic key you chose (must be one of the available topics).
 - "done": true only if at least 3 questions are answered and you have enough for an excellent result.
+- "summary": ONLY when no questions have been answered yet: one plain sentence, max 16 words, starting with
+  "You want", restating what they want to create and for what purpose. Otherwise an empty string.
+If an earlier answer is vague or ambiguous and the "clarify" topic is available, prefer it: quote their vague
+word and ask for something concrete.
 Never use the words "prompt", "LLM" or "AI model". No exclamation marks.
-Return ONLY JSON: {"field": "...", "question": "...", "why": "...", "suggestions": ["...","...","..."], "done": false}"""
+Return ONLY JSON: {"summary": "", "field": "...", "question": "...", "why": "...", "suggestions": ["...","...","..."], "done": false}"""
 
 
 def validate_q(remaining: list[str]):
@@ -434,6 +445,40 @@ def fallback_plan(body: PlanIn) -> dict:
     }
 
 
+async def llm_text(system: str, user: str, budget: float, max_tokens: int) -> tuple[str, str]:
+    """Plain-text call through the same provider chain (used for the draft preview)."""
+    deadline = time.monotonic() + budget
+    last = None
+    for p in PROVIDERS["plan"]:
+        left = deadline - time.monotonic()
+        if left < 3:
+            break
+        try:
+            if p.native_anthropic:
+                txt = await asyncio.wait_for(call_anthropic(p.configured, system, user, max_tokens), timeout=left)
+            else:
+                r = await asyncio.wait_for(p.client.chat.completions.create(
+                    model=await p.model(), temperature=0.6, max_tokens=max_tokens,
+                    messages=[{"role": "system", "content": system}, {"role": "user", "content": user}]), timeout=left)
+                txt = r.choices[0].message.content or ""
+            txt = re.sub(r"<think>.*?</think>", "", txt, flags=re.S).strip()
+            if txt:
+                return txt, p.name
+        except Exception as e:  # noqa: BLE001
+            last = e
+            log.warning("%s preview failed: %s", p.name, e)
+    raise last or RuntimeError("no provider")
+
+
+PREVIEW_SYSTEM = """You are the assistant receiving the instructions below. Produce a short FIRST DRAFT preview of the
+deliverable so a non-technical person can see what they will get.
+- Markdown only: a title (#), short sections (##), bullet lists, and a table if the deliverable is tabular.
+- Maximum 300 words. Do not ask questions. Where a needed fact is missing, write [to be added].
+- If the deliverable is an image or visual design, give the exact text that would appear on it and a
+  short "Layout" section describing placement, colors and imagery.
+- Never invent names, prices, dates or credentials that were not given."""
+
+
 # ---------------- app ----------------
 app = FastAPI(title="Ask Me First")
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
@@ -458,15 +503,17 @@ async def next_question(body: NextQuestionIn):
     remaining = [s for s in FALLBACK_ORDER if s not in asked]
     if len(body.history) >= MAX_QUESTIONS or not remaining:
         return NextQuestionOut(done=True, source="plan")
+    offered = remaining + (["clarify"] if len(body.history) >= 2 and "clarify" not in asked else [])
 
     user = context_block(body.request, body.history, body.upload_text)
     user += f"\n\nQuestions answered so far: {len(body.history)} (maximum {MAX_QUESTIONS})."
-    user += "\nAvailable topics:\n" + "\n".join(f"- {k}: {SLOTS[k]}" for k in remaining)
+    user += "\nAvailable topics:\n" + "\n".join(f"- {k}: {SLOTS[k]}" for k in offered)
     t0 = time.time()
     try:
-        d, src = await llm_json("q", Q_SYSTEM, user, Q_TIMEOUT, 1200, validate_q(remaining))
+        d, src = await llm_json("q", Q_SYSTEM, user, Q_TIMEOUT, 1200, validate_q(offered))
         done = bool(d.get("done")) and len(body.history) >= MIN_QUESTIONS
-        out = NextQuestionOut(question=d["question"].strip(), why=d["why"].strip(), field=d["field"],
+        summary = str(d.get("summary") or "").strip() if not body.history else ""
+        out = NextQuestionOut(summary=summary, question=d["question"].strip(), why=d["why"].strip(), field=d["field"],
                               suggestions=d["suggestions"], done=done, source=src)
     except Exception as e:  # noqa: BLE001
         log.error("question fallback: %s", e)
@@ -507,6 +554,20 @@ async def plan(body: PlanIn):
     log.info("plan v%d via %s in %.1fs", version, p["_source"], time.time() - t0)
     log_run("plan", {"request": body.request, "change": body.change_request, "out": p})
     return p
+
+
+@app.post("/api/preview")
+async def preview(body: PreviewIn):
+    if DEMO_MODE:
+        await asyncio.sleep(DEMO_DELAY * 1.5)
+        return {"markdown": load_demo().get("preview", "# Preview\n\nA preview is not available in demo mode."), "source": "demo"}
+    try:
+        md, src = await llm_text(PREVIEW_SYSTEM, f"Original request: {body.request}\n\nInstructions:\n{body.brief}", 40, 1500)
+        log_run("preview", {"request": body.request, "source": src})
+        return {"markdown": md, "source": src}
+    except Exception as e:  # noqa: BLE001
+        log.error("preview failed: %s", e)
+        return JSONResponse({"error": "A preview could not be created right now. You can still open the instructions in ChatGPT or Claude."}, status_code=502)
 
 
 @app.post("/api/voice_check")
